@@ -42,6 +42,23 @@
     z-index: 0;
   }
 
+  /* ── Watermark ── */
+  body::after {
+    content: 'OKTIC';
+    position: fixed;
+    bottom: 28px;
+    right: 32px;
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(79,142,247,0.18);
+    pointer-events: none;
+    z-index: 9999;
+    user-select: none;
+  }
+
   .wrap { position: relative; z-index: 1; max-width: 820px; margin: 0 auto; padding: 0 20px 60px; }
 
   /* ── Header ── */
