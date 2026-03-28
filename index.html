@@ -31,7 +31,6 @@
     overflow-x: hidden;
   }
 
-  /* Background mesh */
   body::before {
     content: '';
     position: fixed;
@@ -46,15 +45,11 @@
   .wrap { position: relative; z-index: 1; max-width: 820px; margin: 0 auto; padding: 0 20px 60px; }
 
   /* ── Header ── */
-  header {
-    padding: 36px 0 28px;
-    display: flex; flex-direction: column; gap: 6px;
-  }
+  header { padding: 36px 0 28px; display: flex; flex-direction: column; gap: 6px; }
   .tag {
     font-family: 'Syne', sans-serif;
     font-size: 11px; font-weight: 700; letter-spacing: 3px;
-    text-transform: uppercase; color: var(--accent);
-    opacity: 0.85;
+    text-transform: uppercase; color: var(--accent); opacity: 0.85;
   }
   h1 {
     font-family: 'Syne', sans-serif;
@@ -64,13 +59,8 @@
   .subtitle { font-size: 14px; color: var(--muted); margin-top: 4px; }
 
   /* ── Progress bar ── */
-  .progress-wrap {
-    display: flex; align-items: center; gap: 14px;
-    margin-bottom: 28px;
-  }
-  .progress-bar-bg {
-    flex: 1; height: 4px; background: var(--border); border-radius: 99px; overflow: hidden;
-  }
+  .progress-wrap { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; }
+  .progress-bar-bg { flex: 1; height: 4px; background: var(--border); border-radius: 99px; overflow: hidden; }
   .progress-bar-fill {
     height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2));
     border-radius: 99px; transition: width 0.4s ease;
@@ -85,13 +75,11 @@
     padding: 28px 28px 24px;
     margin-bottom: 18px;
     transition: border-color 0.2s;
+    animation: fadeUp 0.35s ease both;
   }
   .q-card:hover { border-color: #3a3f54; }
 
-  .q-meta {
-    display: flex; align-items: center; gap: 10px;
-    margin-bottom: 14px;
-  }
+  .q-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
   .q-num {
     font-family: 'Syne', sans-serif;
     font-size: 11px; font-weight: 700; letter-spacing: 2px;
@@ -99,33 +87,25 @@
   }
   .q-badge {
     font-size: 10px; font-weight: 600; letter-spacing: 1px;
-    text-transform: uppercase; padding: 3px 8px;
-    border-radius: 99px;
+    text-transform: uppercase; padding: 3px 8px; border-radius: 99px;
   }
   .badge-mcq { background: rgba(79,142,247,0.15); color: var(--accent); }
   .badge-msq { background: rgba(124,92,191,0.15); color: #a07de0; }
 
-  .q-text {
-    font-size: 16px; line-height: 1.6; font-weight: 400;
-    margin-bottom: 18px; color: var(--text);
-  }
+  .q-text { font-size: 16px; line-height: 1.6; font-weight: 400; margin-bottom: 18px; color: var(--text); }
 
-  /* Options */
   .options { display: flex; flex-direction: column; gap: 10px; }
   .option {
     display: flex; align-items: center; gap: 12px;
     background: var(--surface2); border: 1.5px solid var(--border);
     border-radius: 10px; padding: 13px 16px;
-    cursor: pointer; transition: all 0.18s;
-    user-select: none;
+    cursor: pointer; transition: all 0.18s; user-select: none;
   }
   .option:hover { border-color: var(--accent); background: rgba(79,142,247,0.06); }
   .option.selected { border-color: var(--accent); background: rgba(79,142,247,0.12); }
-
-  /* Review states */
-  .option.correct  { border-color: var(--green)!important; background: rgba(62,207,142,0.10)!important; }
-  .option.wrong    { border-color: var(--red)!important;   background: rgba(247,95,95,0.10)!important;  }
-  .option.missed   { border-color: var(--yellow)!important; background: rgba(247,201,72,0.10)!important; }
+  .option.correct  { border-color: var(--green) !important; background: rgba(62,207,142,0.10) !important; }
+  .option.wrong    { border-color: var(--red)   !important; background: rgba(247,95,95,0.10)  !important; }
+  .option.missed   { border-color: var(--yellow)!important; background: rgba(247,201,72,0.10) !important; }
 
   .opt-bullet {
     width: 22px; height: 22px; border-radius: 50%;
@@ -140,20 +120,21 @@
   .option.missed   .opt-bullet { border-color: var(--yellow); background: var(--yellow); color: #111; }
 
   .opt-text { font-size: 14.5px; line-height: 1.5; }
+  .msq-hint { font-size: 12px; color: var(--muted); margin-top: 8px; font-style: italic; }
 
-  .msq-hint {
-    font-size: 12px; color: var(--muted); margin-top: 8px;
-    font-style: italic;
+  /* ── Warning bar ── */
+  .warn-bar {
+    background: rgba(247,201,72,0.12); border: 1px solid rgba(247,201,72,0.3);
+    border-radius: 10px; padding: 12px 18px;
+    font-size: 13.5px; color: var(--yellow);
+    margin-bottom: 20px; display: none;
   }
 
   /* ── Submit ── */
-  .submit-wrap {
-    display: flex; justify-content: center; padding: 10px 0 20px;
-  }
+  .submit-wrap { display: flex; justify-content: center; padding: 10px 0 20px; }
   .btn-submit {
     font-family: 'Syne', sans-serif;
-    font-size: 15px; font-weight: 700; letter-spacing: 1px;
-    text-transform: uppercase;
+    font-size: 15px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
     background: linear-gradient(135deg, var(--accent), var(--accent2));
     color: #fff; border: none; border-radius: 10px;
     padding: 16px 52px; cursor: pointer;
@@ -171,33 +152,25 @@
     padding: 48px 20px 36px; text-align: center;
   }
 
-  /* Circular progress */
   .circle-wrap { position: relative; width: 180px; height: 180px; margin-bottom: 28px; }
   .circle-svg { transform: rotate(-90deg); }
-  .circle-bg   { fill: none; stroke: var(--surface2); stroke-width: 14; }
-  .circle-fill { fill: none; stroke-width: 14; stroke-linecap: round;
-                 stroke-dasharray: 502; stroke-dashoffset: 502;
-                 transition: stroke-dashoffset 1.4s cubic-bezier(.4,0,.2,1); }
+  .circle-bg  { fill: none; stroke: var(--surface2); stroke-width: 14; }
+  .circle-fill {
+    fill: none; stroke-width: 14; stroke-linecap: round;
+    stroke-dasharray: 502; stroke-dashoffset: 502;
+    transition: stroke-dashoffset 1.4s cubic-bezier(.4,0,.2,1);
+  }
   .circle-label {
     position: absolute; inset: 0;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
   }
-  .pct-num {
-    font-family: 'Syne', sans-serif;
-    font-size: 40px; font-weight: 800; line-height: 1;
-  }
+  .pct-num { font-family: 'Syne', sans-serif; font-size: 40px; font-weight: 800; line-height: 1; }
   .pct-sym { font-size: 18px; font-weight: 600; color: var(--muted); }
 
-  .result-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 26px; font-weight: 800; margin-bottom: 8px;
-  }
+  .result-title { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; margin-bottom: 8px; }
   .result-sub { font-size: 15px; color: var(--muted); margin-bottom: 30px; }
 
-  .stats-row {
-    display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
-    margin-bottom: 40px;
-  }
+  .stats-row { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; margin-bottom: 40px; }
   .stat-chip {
     background: var(--surface); border: 1px solid var(--border);
     border-radius: 10px; padding: 14px 22px; text-align: center; min-width: 100px;
@@ -208,43 +181,29 @@
   .section-title {
     font-family: 'Syne', sans-serif;
     font-size: 13px; font-weight: 700; letter-spacing: 2px;
-    text-transform: uppercase; color: var(--muted);
-    margin-bottom: 16px;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 16px;
   }
 
-  /* Wrong answers review */
   .review-card {
     background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 22px 24px;
-    margin-bottom: 14px;
+    border-radius: var(--radius); padding: 22px 24px; margin-bottom: 14px;
   }
   .review-q { font-size: 15px; line-height: 1.6; margin-bottom: 14px; color: var(--text); }
   .review-opts { display: flex; flex-direction: column; gap: 8px; }
 
   .btn-retry {
     font-family: 'Syne', sans-serif;
-    font-size: 14px; font-weight: 700; letter-spacing: 1px;
-    text-transform: uppercase;
-    background: transparent;
-    border: 2px solid var(--accent); color: var(--accent);
+    font-size: 14px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    background: transparent; border: 2px solid var(--accent); color: var(--accent);
     border-radius: 10px; padding: 14px 40px; cursor: pointer;
     transition: all 0.18s; margin-top: 36px;
   }
   .btn-retry:hover { background: var(--accent); color: #fff; }
 
-  /* Unanswered warning */
-  .warn-bar {
-    background: rgba(247,201,72,0.12); border: 1px solid rgba(247,201,72,0.3);
-    border-radius: 10px; padding: 12px 18px;
-    font-size: 13.5px; color: var(--yellow);
-    margin-bottom: 20px; display: none;
-  }
-
   @keyframes fadeUp {
-    from { opacity:0; transform:translateY(18px); }
-    to   { opacity:1; transform:translateY(0); }
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
-  .q-card { animation: fadeUp 0.35s ease both; }
 
   @media (max-width: 540px) {
     .q-card { padding: 20px 16px; }
@@ -262,7 +221,7 @@
     <header>
       <span class="tag">NPTEL · IIT Kharagpur</span>
       <h1>Intellectual Property Rights</h1>
-      <p class="subtitle">Introduction to IP for Engineers &amp; Technologists · All Assignments</p>
+      <p class="subtitle">Introduction to IP for Engineers &amp; Technologists · All Assignments (Weeks 1–8)</p>
     </header>
 
     <div class="progress-wrap">
@@ -270,8 +229,7 @@
       <span class="progress-label" id="prog-label">0 / 0 answered</span>
     </div>
 
-    <div class="warn-bar" id="warn-bar">⚠ Some questions are unanswered. Please answer all before submitting.</div>
-
+    <div class="warn-bar" id="warn-bar"></div>
     <div id="questions-container"></div>
 
     <div class="submit-wrap">
@@ -333,135 +291,140 @@
 </div>
 
 <script>
-const allQuestions=[
-/* ---------- ASSIGNMENT 1 ---------- */
-{question:"IP rights are granted for a limited duration because:",type:"mcq",options:["Increase cost of creation","Balance creator reward with public access","Permanent monopoly","Creations lose value"],answer:[1]},
-{question:"Intellectual property refers to:",type:"mcq",options:["Physical property","Public goods","Creations of the mind with exclusive rights","Government data"],answer:[2]},
-{question:"Which is NOT part of property ownership rights?",type:"mcq",options:["Right to use","Right to license","Right to exclude","Right to terminate legislation"],answer:[3]},
-{question:"Trade secrets are suitable when invention can be easily reverse engineered.",type:"mcq",options:["True","False","Depends","Always protected"],answer:[1]},
-{question:"Personality theory mainly applies to:",type:"mcq",options:["Patents","Copyright and industrial design","Trade secrets","Geographical indications"],answer:[1]},
-{question:"Protection of new plant varieties falls under:",type:"mcq",options:["Trade secret","Industrial design","Patent","Plant variety rights"],answer:[3]},
-{question:"Geographical indications reward:",type:"mcq",options:["Companies","Communities producing regional goods","Patent offices","Scientists"],answer:[1]},
-{question:"Patent duration in India:",type:"mcq",options:["10 years","15 years","20 years","25 years"],answer:[2]},
-{question:"Trademark mainly protects:",type:"mcq",options:["Scientific discoveries","Brand identifiers","Processes","Chemicals"],answer:[1]},
-{question:"Industrial design protects:",type:"mcq",options:["Appearance of article","Software code","Manufacturing process","Trade secret"],answer:[0]},
-{question:"Reasons IPR protection exists:",type:"msq",options:["Information easy to copy","Encourage innovation","Public benefit","Prevent competition"],answer:[0,1,2]},
-{question:"Importance of IPR knowledge for engineers:",type:"msq",options:["Evaluate patents","Avoid infringement","Protect ideas forever","Enable licensing"],answer:[0,1,3]},
-{question:"Labor theory suggests:",type:"msq",options:["Reward intellectual work","Only physical labor","Justifies exclusive rights","Proposed by John Locke"],answer:[0,2,3]},
-{question:"Examples of trade secrets:",type:"msq",options:["Secret formula","Public specification","Private source code","Logo"],answer:[0,2]},
-{question:"Touchscreen software and coating formula protected by:",type:"msq",options:["Copyright","Trademark","Trade secret","Industrial design"],answer:[0,2]},
-/* ---------- ASSIGNMENT 2 ---------- */
-{question:"Patent negative right means:",type:"mcq",options:["Use invention freely","Prevent others using invention","Keep invention secret","Automatic global rights"],answer:[1]},
-{question:"Routine engineering improvement:",type:"mcq",options:["Always patentable","Not patentable lacking inventive step","Patentable always","Trade secret only"],answer:[1]},
-{question:"Which is an invention?",type:"mcq",options:["Finding mineral","Identifying natural gene","Synthetic compound variant","Oil location discovery"],answer:[2]},
-{question:"Prior claiming refers to:",type:"mcq",options:["Journal article","Earlier patent claiming same invention","Public demonstration","Lab test"],answer:[1]},
-{question:"New drug form without improved efficacy:",type:"mcq",options:["Patentable","Not patentable","Depends on country","Always patentable"],answer:[1]},
-{question:"Violation of natural law:",type:"mcq",options:["Improved engine","Water flowing uphill without energy","Control software","Aerospace alloy"],answer:[1]},
-{question:"Prior art search done to:",type:"mcq",options:["Improve marketing","Avoid duplicate inventions","Increase patents","Lower taxes"],answer:[1]},
-{question:"Research paper describing invention:",type:"mcq",options:["Not prior art","Counts as prior art","Valid only if patent","Only recent papers count"],answer:[1]},
-{question:"Complete specification must be filed within:",type:"mcq",options:["6 months","12 months","18 months","24 months"],answer:[1]},
-{question:"Provisional specification establishes:",type:"mcq",options:["Patent grant","Priority date","Ownership","Expiry date"],answer:[1]},
-{question:"Academic research with patented tech:",type:"msq",options:["Non commercial exemption","Publishing removes patent rights","Commercial use infringement","Rules vary by country"],answer:[0,2,3]},
-{question:"Patent claims:",type:"msq",options:["Define boundaries","Supported by specification","Title defines scope","Unsupported broad claims rejected"],answer:[0,1,3]},
-{question:"Not patentable due to ethics:",type:"msq",options:["Tobacco inventions","Diagnostic kits","Medical treatment methods","Engine devices"],answer:[0,2]},
-{question:"Prior art search methods:",type:"msq",options:["Keyword search","Patent classification","Random browsing","Boolean operators"],answer:[0,1,3]},
-{question:"Inventors may include:",type:"msq",options:["Professors","Research scholars","Fabricators with contribution","Assistants with significant input"],answer:[0,1,2,3]},
-/* ---------- ASSIGNMENT 3 ---------- */
-{question:"Provisional patent specification excludes:",type:"mcq",options:["Essential features","Title","Abstract","Claims"],answer:[3]},
-{question:"Correct patent procedure:",type:"mcq",options:["File→FER→Publication","File→Publication→Exam→FER","File→Grant→FER","FER→File"],answer:[1]},
-{question:"If main patent revoked:",type:"mcq",options:["Addition revoked","Cannot renew","Becomes independent","Loses rights"],answer:[2]},
-{question:"Annual requirement for patent:",type:"mcq",options:["Amend claims","Working statement","Addition filing","Compulsory license"],answer:[1]},
-{question:"Paris Convention priority:",type:"mcq",options:["6 months","12 months","18 months","24 months"],answer:[1]},
-{question:"Filing abroad without IPO permission:",type:"mcq",options:["Allowed","Illegal","Optional","Depends"],answer:[1]},
-{question:"Research use of patented product:",type:"mcq",options:["Allowed","Illegal","Commercial use allowed","Patent void"],answer:[0]},
-{question:"Direct infringement:",type:"mcq",options:["Authorized use","Unauthorized making/selling","Research use","Education use"],answer:[1]},
-{question:"Patent manager role:",type:"mcq",options:["Only filing","Integrate creation transaction enforcement","Marketing","Research"],answer:[1]},
-{question:"Competitor using patented process:",type:"mcq",options:["Ignore","File lawsuit","Sell patent","Promote competitor"],answer:[1]},
-{question:"Opposition steps:",type:"msq",options:["Pre-grant opposition","Post-grant opposition","Provide evidence","Automatic compensation"],answer:[0,1,2]},
-{question:"Patent renewal facts:",type:"msq",options:["Annual fee needed","Immediate permanent loss","Restoration possible","Restoration after 5 years"],answer:[0,2]},
-{question:"PCT advantages:",type:"msq",options:["Single application","31-month national phase","No national fees","International search report"],answer:[0,1,3]},
-{question:"Patent infringement examples:",type:"msq",options:["Manufacturing patented drug","Supplying essential components","Research use","Hospital treatment"],answer:[0,1]},
-{question:"Patent revenue generation:",type:"msq",options:["Licensing","Infringement damages","IP audit","Selling patents"],answer:[0,1,3]},
-/* ---------- ASSIGNMENT 4 ---------- */
-{question:"Utility models suitable for SMEs because:",type:"mcq",options:["High cost","Long process","Faster cheaper protection","20 year monopoly"],answer:[2]},
-{question:"Utility model duration:",type:"mcq",options:["3 years","5 years","7-10 years","20 years"],answer:[2]},
-{question:"Requirement for copyright:",type:"mcq",options:["Novelty","Industrial use","Originality","Inventive step"],answer:[2]},
-{question:"Copyright duration in India:",type:"mcq",options:["Life+40","Life+50","Life+60","Life+70"],answer:[2]},
-{question:"Copyright registration mandatory:",type:"mcq",options:["Yes","No","Sometimes","International only"],answer:[1]},
-{question:"Copyright exists in:",type:"mcq",options:["Idea","Tangible expression","Fact","Public domain"],answer:[1]},
-{question:"Primary copyright infringement:",type:"mcq",options:["Direct copying","Helping copying","Teaching use","Research"],answer:[0]},
-{question:"Plagiarism means:",type:"mcq",options:["Citation","Using others work as own","Fair use","Legal copy"],answer:[1]},
-{question:"Software copyright test US:",type:"mcq",options:["Similarity test","AFC test","Fair use test","Plagiarism test"],answer:[1]},
-{question:"International copyright treaty:",type:"mcq",options:["DMCA","Berne Convention","WIPO","EU directive"],answer:[1]},
-{question:"Patent vs utility models:",type:"msq",options:["Higher inventive step","Longer patent protection","Utility models incremental","Only biotech"],answer:[0,1,2]},
-{question:"Copyright protects:",type:"msq",options:["Dialogues","Characters","Plot idea","Writing style"],answer:[0,1,3]},
-{question:"Copyright ownership:",type:"msq",options:["Author first owner","Freelancer auto transfer","Employment contract transfer","Author always owner"],answer:[0,2]},
-{question:"Secondary infringement:",type:"msq",options:["Sharing tools","Hosting piracy","Selling legal copies","Embedding infringing video"],answer:[0,1,3]},
-{question:"Fair use examples:",type:"msq",options:["Teaching copies","Free software download","Class demonstration","Selling recordings"],answer:[0,2]},
-/* ---------- ASSIGNMENT 5 ---------- */
-{question:"Industrial design protection requires:",type:"mcq",options:["Disclosure","Journal publication","Registration","Drawing submission"],answer:[2]},
-{question:"Industrial design protects:",type:"mcq",options:["Artistic features","Aesthetic features","Both","Functional"],answer:[1]},
-{question:"Design not eligible if:",type:"mcq",options:["No novelty","Already disclosed","Obscene","All"],answer:[3]},
-{question:"Design registration statement:",type:"mcq",options:["Cancellation possible","Must be new original","Both true","Both false"],answer:[0]},
-{question:"Article definition:",type:"mcq",options:["Movable manufactured item","Building","Unsellable component","Printed text"],answer:[0]},
-{question:"Logo protection type:",type:"mcq",options:["Copyright","Trademark","Patent","Trade secret"],answer:[1]},
-{question:"Trademark rights nature:",type:"mcq",options:["Mandatory registration","Purely registration","Use based right","Only registered"],answer:[2]},
-{question:"Trademark cancelled after non use:",type:"mcq",options:["2 years","3 years","5 years","7 years"],answer:[2]},
-{question:"Trade dress includes:",type:"mcq",options:["Packaging","Shape","Colour","All"],answer:[3]},
-{question:"Design applied to:",type:"mcq",options:["Article","Paper","Board","Icon"],answer:[0]},
-/* ---------- ASSIGNMENT 6 ---------- */
+const allQuestions = [
+/* ── WEEK 1 ── */
+{question:"Why are IP rights granted for a limited duration instead of permanently?",type:"mcq",options:["To increase the cost of creation","To balance creator rewards with public access","To allow creators to monopolize markets forever","Because creations lose value after one year"],answer:[1]},
+{question:"Intellectual Property can best be described as:",type:"mcq",options:["Physical objects owned by an inventor","Public goods available for free use","Creations of the mind granted exclusive rights for a limited time","Government-owned information"],answer:[2]},
+{question:"Which of the following is NOT typically part of the bundle of rights under property ownership?",type:"mcq",options:["Right to use","Right to license","Right to exclude","Right to terminate legislation"],answer:[3]},
+{question:"Choose the correct statements: A. Trade secrets are suitable when an invention can be easily reverse-engineered. B. Copyright protects creative expression, but not the underlying ideas.",type:"mcq",options:["Only A is true","Only B is true","Both A and B are true","Both A and B are false"],answer:[1]},
+{question:"Assertion: Fashion designers receive legal protection for their unique dress designs. Reason: Utility Theory justifies protection because designs may have societal or commercial utility.",type:"mcq",options:["Both A and R are true, and R is the correct explanation","Both A and R are true, but R is NOT the correct explanation","A is true, R is false","A is false, R is true"],answer:[1]},
+{question:"Assertion: Personality Theory is mostly applicable to copyright and industrial design. Reason: These creations reflect the personality of the creator and moral rights are involved.",type:"mcq",options:["Both A and R are true, and R is the correct explanation","Both A and R are true, but R is NOT the correct explanation","A is true, R is false","A is false, R is true"],answer:[0]},
+{question:"The creation of a new plant variety and granting rights to the breeder is an example of:",type:"mcq",options:["Trade Secret","Industrial Design","Patent","Plant Variety Rights"],answer:[3]},
+{question:"Assertion: Geographical Indications reward communities for unique products linked to a region. Reason: GIs are granted based on functional innovations within a product.",type:"mcq",options:["Both A and R are true, and R is the correct explanation","Both A and R are true, but R is NOT the correct explanation","A is true, R is false","A is false, R is true"],answer:[2]},
+{question:"Match IP form with typical duration in India — Patent / Industrial Design / Copyright / GI:",type:"mcq",options:["Patent=20yr, ID=10yr, Copyright=Life+60, GI=10yr (renewable)","Patent=10yr, ID=20yr, Copyright=Life+60, GI=Life","Patent=15yr, ID=10yr, Copyright=Life+70, GI=10yr","Patent=20yr, ID=15yr, Copyright=Life+50, GI=20yr"],answer:[0]},
+{question:"Match IP to scenario — Trademark / Patent / Industrial Design / Copyright with Logo on packaging / Functional engine improvement / Shape of perfume bottle / Software UI layout:",type:"mcq",options:["Trademark=Logo, Patent=Engine, ID=Bottle, Copyright=Software UI","Trademark=Software UI, Patent=Logo, ID=Engine, Copyright=Bottle","Trademark=Engine, Patent=Software UI, ID=Logo, Copyright=Bottle","Trademark=Bottle, Patent=Engine, ID=Logo, Copyright=Software UI"],answer:[0]},
+{question:"Select all TRUE statements about IP rights and information goods:",type:"msq",options:["Without IP rights, creators may still receive full economic benefits naturally","The ease of duplication of information goods is a key reason IP protection is necessary","Granting perpetual ownership ensures both creators and society continuously benefit","IPR aim to convert public-good creations into excludable assets for a limited time","If a creator keeps full exclusivity and does not disclose, society may receive limited benefit"],answer:[1,3,4]},
+{question:"For an engineer or technologist, understanding IPR is essential because it enables:",type:"msq",options:["Evaluation of patent landscapes for product development","Avoidance of infringement risks","Protection of ideas indefinitely without renewal","Strategic collaboration and technology licensing"],answer:[0,1,3]},
+{question:"Which statements are true about Labour Theory?",type:"msq",options:["Rewards creators for intellectual work","Only applies to physical labor","Basis for justifying exclusive rights","Proposed by John Locke"],answer:[0,2,3]},
+{question:"Which elements of mobile technology could be considered trade secrets?",type:"msq",options:["Proprietary polymer formula for durability","Publicly advertised camera specifications","Source code of proprietary software not disclosed publicly","Logo of the mobile company"],answer:[0,2]},
+{question:"Which two IP rights primarily protect touchscreen software and a secret screen coating formula?",type:"msq",options:["Copyright","Trademark","Trade Secret","Industrial Design"],answer:[0,2]},
+/* ── WEEK 2 ── */
+{question:"Which of the following best describes the negative right associated with patents?",type:"mcq",options:["The right to exploit the invention commercially","The right to prevent others from using the invention without permission","The right to keep the invention secret","The right to obtain patents in multiple countries automatically"],answer:[1]},
+{question:"A startup combines two known alloys for slightly improved corrosion resistance using a technique any materials engineer would typically apply. Most appropriate assessment?",type:"mcq",options:["Patentable because any improvement qualifies as novelty","Not patentable because it lacks an inventive step","Patentable because it has industrial applicability","Patentable because combining known materials always creates patentable innovation"],answer:[1]},
+{question:"Which would qualify as an 'invention' rather than a 'discovery'?",type:"mcq",options:["Finding a new mineral in a forest","Identifying a naturally occurring gene sequence","Developing a synthetic variant of a natural compound with improved properties","Mapping the location of an oil field"],answer:[2]},
+{question:"Which BEST represents 'prior claiming'?",type:"mcq",options:["Someone has described a similar invention in a journal","Someone has filed a patent earlier that claims the same invention","Someone publicly demonstrated a similar invention at an event","Someone used the invention in a confidential lab experiment"],answer:[1]},
+{question:"Assertion: A new crystalline form of a known drug cannot be patented if its therapeutic efficacy is the same. Reason: Mere discovery of a new form without enhancement of efficacy is not patentable.",type:"mcq",options:["Both A and R are true, and R is the correct explanation","Both A and R are true, but R is NOT the correct explanation","A is true, R is false","A is false, R is true"],answer:[0]},
+{question:"Which invention is excluded due to being contrary to natural laws?",type:"mcq",options:["Device to increase engine efficiency using new lubricant","System to make water flow from low to high altitude without pumps","Software embedded in hardware for process control","New alloy for aerospace applications"],answer:[1]},
+{question:"Assertion: Prior art search is necessary before investing in R&D. Reason: Companies use prior art search to avoid duplicating existing inventions.",type:"mcq",options:["Both A and R are true, and R is the correct explanation","Both A and R are true, but R is NOT the correct explanation","A is true, R is false","A is false, R is true"],answer:[0]},
+{question:"GreenTech finds a 3-year-old research paper describing a material with similar properties in a different application. Which statement is correct?",type:"mcq",options:["The research paper cannot affect patentability because it is not a patent","The research paper can be considered prior art and may affect novelty or inventive step","Only patents filed in the last 12 months are relevant","Non-patent literature cannot be used unless cited in another patent"],answer:[1]},
+{question:"Within how many months must a complete specification be filed after filing a provisional application?",type:"mcq",options:["6 months","12 months","18 months","24 months"],answer:[1]},
+{question:"Which statement is true regarding a provisional and complete specification?",type:"mcq",options:["Complete specification can be outside the scope of provisional specification","Provisional specification establishes priority date","Filing multiple provisional specifications is not allowed","Provisional specification grants full patent rights"],answer:[1]},
+{question:"A university lab uses a patented microchip architecture for non-commercial government-funded research. Which statements are true regarding infringement?",type:"msq",options:["Non-commercial academic use is usually exempt","Publishing results does not remove the patent owner's rights","Using the patented architecture commercially would be infringement","Research exemption rules vary by jurisdiction"],answer:[0,1,2,3]},
+{question:"Choose all correct statements about patent claims and protection scope:",type:"msq",options:["Claims define the legal boundaries of the patent","Claims must be supported by the specification","The title of the patent determines the scope of protection","Broad claims with insufficient disclosure can be rejected"],answer:[0,1,3]},
+{question:"Choose all that CANNOT be patented in India due to public health or ethical reasons:",type:"msq",options:["Tobacco-related inventions","Diagnostic kits for human diseases","Methods of medical treatment of humans or animals","Devices for improving engine efficiency"],answer:[0,2]},
+{question:"Which are methods used to perform prior art search?",type:"msq",options:["Keyword-based search","Patent classification search","Random internet browsing","Boolean operator-based search"],answer:[0,1,3]},
+{question:"A research team of Prof. Roy, Prof. Das, and three scholars developed a bio-gas system; Mr. X fabricated it and Mr. Y assisted synthesis. Who can be considered first and true inventors?",type:"msq",options:["Only Professor Roy and Professor Das","All five team members (Professors + scholars)","Mr. X and Mr. Y, if their contribution is substantial","Only the research scholars"],answer:[1,2]},
+/* ── WEEK 3 ── */
+{question:"Which is NOT required in a provisional patent specification?",type:"mcq",options:["Essential features of the invention","Title of the invention","Abstract","Claims"],answer:[3]},
+{question:"Which is a correct sequence in patent prosecution in India?",type:"mcq",options:["File → FER → Publication → Grant","File → Request for publication → Request for examination → FER","File → Grant → FER → Publication","FER → File application → Grant → Publication"],answer:[1]},
+{question:"If the main patent is revoked, what happens to the patent of addition?",type:"mcq",options:["It is automatically revoked","It cannot be renewed","It becomes independent","It loses all rights"],answer:[2]},
+{question:"Which is required to be submitted annually for a patent in India?",type:"mcq",options:["Amendment of claims","Statement of working of the invention","Filing of patent of addition","Compulsory license request"],answer:[1]},
+{question:"Under the Paris Convention, what is the maximum period to file a patent in other member countries after the first filing?",type:"mcq",options:["6 months","12 months","18 months","24 months"],answer:[1]},
+{question:"Assertion: An Indian citizen can independently file a patent abroad without informing the IPO. Reason: Section 39 of the Indian Patents Act requires IPO permission for filing abroad.",type:"mcq",options:["Both A and R are true, and R is the correct explanation","Both A and R are true, but R is NOT the correct explanation","A is true, R is false","A is false, R is true"],answer:[3]},
+{question:"Which is true regarding exceptions to patent infringement?",type:"mcq",options:["Use of a patented process for personal commercial gain is allowed","Using patented products for research is exempt","Importing patented products for commercial sale is exempt","Willful infringement is exempt if done unknowingly"],answer:[1]},
+{question:"Statement 1: Direct infringement occurs when a third party makes, uses, sells or imports a patented product without authorization. Statement 2: Using a patented product for government-approved research trials is considered direct infringement.",type:"mcq",options:["Only Statement 1 is true","Only Statement 2 is true","Both statements are true","Both statements are false"],answer:[0]},
+{question:"What is the primary role of a patent manager in an organization?",type:"mcq",options:["To integrate creation, transaction, and enforcement of patent rights","To perform only legal filings of patents","To market the company's products","To conduct market research for competitors"],answer:[0]},
+{question:"A company discovers a competitor is using its patented process without authorization. What should the patent manager do?",type:"mcq",options:["Ignore the infringement and hope it stops","Integrate with the legal team to file an infringement suit","Sell the patent immediately","Ask the competitor to market the product"],answer:[1]},
+{question:"A researcher finds their invention has been described in local tribal knowledge (not formally published). Which steps can a concerned person take?",type:"msq",options:["File a pre-grant opposition claiming prior knowledge","Wait until the patent is granted to file a post-grant opposition","Provide evidence of local or traditional knowledge to the patent office","Claim compensation for wrongful obtaining of the patent"],answer:[0,2]},
+{question:"Which statements about patent renewal and restoration are correct?",type:"msq",options:["Renewal fees must be paid annually until the 20th year","Missing renewal fees always leads to permanent loss of patent rights","Restoration is possible if renewal fees were unintentionally missed","Restoration can be filed after the patent has been abandoned for more than 5 years"],answer:[0,2]},
+{question:"Which advantages are correctly associated with the PCT application?",type:"msq",options:["File a single international application covering multiple countries","Gets 31 months from priority date to enter national phases","Avoids paying any national fees when entering national phases","Receives an International Search Report to assess novelty and inventive step"],answer:[0,1,3]},
+{question:"Company A holds a patent for a cancer drug. Company B manufactures and sells it without authorization. Company C sells essential chemical ingredients but doesn't make the final drug. Which are patent infringement?",type:"msq",options:["Company B directly manufacturing and selling the drug","Company C selling the chemical ingredients that aid in producing the drug","Company B using the drug only for internal research purposes","A hospital purchasing the drug from Company A and using it to treat patients"],answer:[0,1]},
+{question:"Which are considered ways to generate revenue from patents?",type:"msq",options:["Licensing the patent","Enforcement through infringement lawsuits","Conducting IP audits for potential inventions","Selling or assigning patent rights"],answer:[0,1,3]},
+/* ── WEEK 4 ── */
+{question:"Why are utility models considered suitable for SMEs?",type:"mcq",options:["They require high investment to obtain","They involve lengthy examination procedures","They are easier and faster to obtain with lower costs","They grant monopoly rights for 20 years"],answer:[2]},
+{question:"Assertion: Utility model protection generally lasts for 7–10 years. Reason: The life cycle of incremental inventions is usually short, so a shorter protection period is sufficient.",type:"mcq",options:["Both A and R are true, and R is the correct explanation","Both A and R are true, but R is NOT the correct explanation","A is true, R is false","A is false, R is true"],answer:[0]},
+{question:"Which is a requirement for a work to qualify for copyright protection?",type:"mcq",options:["Novelty","Industrial applicability","Originality","Inventive step"],answer:[2]},
+{question:"Consider statements about copyright: 1. Authors get exclusive rights to reproduce, adapt, translate, perform, communicate. 2. Main purpose is to protect inventions and industrial processes. 3. Copyright in India lasts for author's lifetime plus 60 years.",type:"mcq",options:["Only statement 1 is correct","Statements 1 and 2 are correct","Statements 1 and 3 are correct","All statements are correct"],answer:[2]},
+{question:"Assertion: Copyright registration is mandatory in India for a work to receive copyright protection. Reason: Registration provides evidence of ownership and helps in case of disputes.",type:"mcq",options:["Both A and R are true, and R is the correct explanation","Both A and R are true, but R is NOT the correct explanation","A is true, but R is false","A is false, but R is true"],answer:[3]},
+{question:"Which of the following works can copyright subsist upon?",type:"mcq",options:["Idea","Tangible expression","Fact","Public domain work"],answer:[1]},
+{question:"Statement 1: Primary copyright infringement occurs when a person directly copies a copyrighted work without permission. Statement 2: Secondary infringement occurs when a person facilitates or induces someone else to infringe copyright.",type:"mcq",options:["Only statement 1 is true","Only statement 2 is true","Both statements 1 and 2 are true","Both statements 1 and 2 are false"],answer:[2]},
+{question:"Which is true about plagiarism?",type:"mcq",options:["Giving proper source attribution always prevents plagiarism","Presenting someone else's copyrighted work as your own is plagiarism","Fair use applies automatically to all academic works","Plagiarism is legal"],answer:[1]},
+{question:"Which test is used in the US to determine software copyright infringement?",type:"mcq",options:["Substantial similarity test","Abstraction-Filtration-Comparison (AFC) test","Fair use factor test","Plagiarism detection test"],answer:[1]},
+{question:"What international treaty governs copyright protection among its member countries?",type:"mcq",options:["Digital Millennium Copyright Act","Berne Convention","World Intellectual Property Organization (WIPO)","European Union Copyright Directive"],answer:[1]},
+{question:"Which correctly describe differences between patents and utility models?",type:"msq",options:["Patents require a higher inventive step than utility models","Patents have a longer protection period than utility models","Utility models are suitable for incremental innovations, patents are not","Utility models provide protection only in biotechnology fields"],answer:[0,1,2]},
+{question:"A novelist writes a story about a detective. Another author uses the same plot concept but different characters and dialogues. Which aspects are protected under copyright?",type:"msq",options:["Original dialogues of the first novel","Characters created in the first novel","Plot idea of a detective solving a mystery","Style and expression of the writing"],answer:[0,1,3]},
+{question:"Which statements are true regarding authors and owners of a copyrighted work?",type:"msq",options:["The author is always the first owner of the copyright unless an agreement states otherwise","Freelancers automatically transfer ownership of their work to the client","An employee creating work under employment may transfer ownership to the employer depending on the contract","Owner and author are always the same person"],answer:[0,2]},
+{question:"Which practices can lead to secondary copyright infringement?",type:"msq",options:["Providing tools that enable the sharing of copyrighted material","Hosting a website that facilitates the distribution of pirated works","Selling legitimate copies of copyrighted works in physical stores","Embedding an infringing video from a third-party website onto your own site"],answer:[0,1,3]},
+{question:"Which of Meera's actions reflect fair use?",type:"msq",options:["Making temporary copies of software for instructional purposes","Posting the software installer for free download on her blog","Demonstrating the software features to her students during class","Selling access to the recorded demonstration to other schools"],answer:[0,2]},
+/* ── WEEK 5 ── */
+{question:"An industrial design in India receives legal protection only after:",type:"mcq",options:["Public disclosure","Publication in a journal","Registration under the Designs Act","Submission of drawings"],answer:[2]},
+{question:"Industrial Design protects:",type:"mcq",options:["Artistic features","Aesthetic features","Both artistic and aesthetic features","Functional features"],answer:[1]},
+{question:"Which situation would make an industrial design ineligible for registration in India?",type:"mcq",options:["The design lacks novelty or originality","The design has been disclosed to the public prior to filing","The design contains scandalous or obscene matter","All of the above"],answer:[3]},
+{question:"Statement 1: A registered design can be cancelled even after the registration certificate is issued. Statement 2: For registration, a design must necessarily be both new and original.",type:"mcq",options:["Statement 1 is true, Statement 2 is false","Statement 1 is false, Statement 2 is true","Both Statement 1 and Statement 2 are true","Both Statement 1 and Statement 2 are false"],answer:[0]},
+{question:"Under the Designs Act, which best describes an 'article' for industrial design protection?",type:"mcq",options:["A movable item that can be manufactured and marketed on its own","Any immovable structure such as a house or building","A component that cannot be sold separately","Any written or printed material"],answer:[0]},
+{question:"A logo used by a company to distinguish its goods from others in the marketplace is primarily protected under which form of IP right?",type:"mcq",options:["Copyright","Trademark","Patent","Trade secret"],answer:[1]},
+{question:"Which correctly describes the nature of trademark rights in India?",type:"mcq",options:["Trademark registration is mandatory and use is optional","Trademark is a purely registration-based right","Trademark registration is optional, and the right is use-based","Trademark protection is limited to registered marks only"],answer:[2]},
+{question:"A registered trademark in India has not been used for a continuous period. After what minimum duration of non-use can it be cancelled?",type:"mcq",options:["2 years","3 years","5 years","7 years"],answer:[2]},
+{question:"Trade dress includes:",type:"mcq",options:["Packaging","Shape of good","Colour combination","All of the above"],answer:[3]},
+{question:"In order to obtain protection, a design should be applied to an:",type:"mcq",options:["Article","Paper","Blackboard","Icon"],answer:[0]},
+{question:"Review: Statement 1: Industrial Design registration in India does not deal with functional features of an article. Statement 2: Logos fall within the purview of Industrial Design protection.",type:"msq",options:["Statement 1 is true","Statement 2 is false","Both Statement 1 and 2 are true","Both Statement 1 and 2 are false"],answer:[0,1]},
+{question:"Who can apply for registration of an Industrial Design in India?",type:"msq",options:["Proprietor of a new or original design","Any person who has commissioned the design","Any person who has acquired the design or the right to apply through assignment","Legal heir of the deceased proprietor"],answer:[0,1,2,3]},
+{question:"Which statements regarding Industrial Design are true?",type:"msq",options:["Industrial Design is always associated with an article","The design should be visible on a finished article","Industrial Design protects technical or functional features","An article includes any part capable of being made and sold separately"],answer:[0,1,3]},
+{question:"Which of the following can be registered as a Trademark in India?",type:"msq",options:["Sound","Smell","Words","Device"],answer:[0,1,2,3]},
+{question:"Review: Statement 1: Trademark registration in India is mandatory. Statement 2: A registered trademark may be cancelled for continuous non-use of five years without valid reasons.",type:"msq",options:["Statement 1 is true","Statement 1 is false","Statement 2 is true","Both Statement 1 and 2 are true"],answer:[1,2]},
+/* ── WEEK 6 ── */
 {question:"The Uniform Domain Name Dispute Resolution Policy (UDRP) was established by which organization?",type:"mcq",options:["USPTO","ICANN","United Nations","World Trade Organization"],answer:[1]},
 {question:"Registering domain names identical or confusingly similar to well-known trademarks with the intention of selling them for profit is known as:",type:"mcq",options:["Meta tagging","Framing","Cybersquatting","Domain name parking"],answer:[2]},
 {question:"A Hallmark used to certify the quality or standard of goods is classified as a:",type:"mcq",options:["Brand name","Certification mark","Collective mark","Trade name"],answer:[1]},
-{question:"Which statement is true regarding certification and collective marks? (S1: A certification mark can be registered by a proprietor of goods or services. S2: A collective mark can be registered by a proprietor of goods or services.)",type:"mcq",options:["Only Statement 1 is true","Only Statement 2 is true","Both statements are true","Both statements are false"],answer:[0]},
+{question:"Statement 1: A certification mark can be registered by a proprietor of goods or services. Statement 2: A collective mark can be registered by a proprietor of goods or services.",type:"mcq",options:["Only Statement 1 is true","Only Statement 2 is true","Both Statement 1 and Statement 2 are true","Both Statement 1 and Statement 2 are false"],answer:[0]},
 {question:"The protection of geographical indication in India is available for:",type:"mcq",options:["Goods","Services","Both goods and services","Arts"],answer:[0]},
 {question:"Geographical Indications primarily indicate:",type:"mcq",options:["The geographical location of manufacture","A link between product characteristics and the region of origin","Ownership of goods","Industrial manufacturing standards"],answer:[1]},
 {question:"Who is legally permitted to use a registered Geographical Indication in India?",type:"mcq",options:["Any person residing in the geographical region","Any person dealing in the goods","A producer of the goods","An authorised user"],answer:[3]},
 {question:"Under the GI of Goods Act, who is legally entitled to file an application for registration of a GI in India?",type:"mcq",options:["Any trader dealing in the goods","A producer of the goods","A consumer association","A legal heir of the producer"],answer:[1]},
 {question:"Which of the following is NOT a registered Geographical Indication?",type:"mcq",options:["Scottish Whisky","Basmati Rice","Indian Neem Tree","Agra Petha"],answer:[2]},
 {question:"Which statement regarding Geographical Indication (GI) rights is correct?",type:"mcq",options:["GI rights can be licensed","GI rights are not transferable","GI rights automatically pass to legal heirs","GI rights are private individual rights"],answer:[1]},
-{question:"Implications of deep linking and framing in the context of domain names and trademarks:",type:"msq",options:["Likelihood of consumer confusion","Resale of goods without authorization","Possible loss of revenue to the trademark owner","Automatic transfer of trademark rights"],answer:[0,2]},
+{question:"What are the possible implications of deep linking and framing in the context of domain names and trademarks?",type:"msq",options:["Likelihood of consumer confusion","Resale of goods without authorization","Possible loss of revenue to the trademark owner","Automatic transfer of trademark rights"],answer:[0,2]},
 {question:"Geographical indication in India is protected by:",type:"msq",options:["Certification Mark","Collective Mark","Separate Act","Common Act"],answer:[0,2]},
-{question:"Benefits associated with protection of Geographical Indications (GIs):",type:"msq",options:["Promotion of regional economic development","Preservation of traditional knowledge and cultural heritage","Increased likelihood of misleading consumers","Strengthening the product–place association"],answer:[0,1,3]},
-{question:"Parameters considered important while registering a Geographical Indication in India:",type:"msq",options:["Distinctiveness or uniqueness of the product","Historical linkage of the product with the region","Geographical location details such as latitude and longitude","Registration as a certification mark"],answer:[0,1,2]},
-{question:"Statements correctly explaining the registration and legal nature of GIs in India:",type:"msq",options:["Details of registered GIs are recorded in Part A and Part B of the GI Register","Any person can file an opposition against a GI application","GI registration is renewed every 10 years","A GI represents a community right and an intellectual property right"],answer:[0,1,3]},
-/* ---------- ASSIGNMENT 7 ---------- */
-{question:"Under which Indian statute can a semiconductor IC layout design be registered and protected?",type:"mcq",options:["The Designs Act, 2000","The Patent Act, 1970","The Semiconductor IC Layout-Design Act, 2000","The Copyright Act, 1957"],answer:[2]},
+{question:"Identify the benefits associated with protection of Geographical Indications (GIs):",type:"msq",options:["Promotion of regional economic development","Preservation of traditional knowledge and cultural heritage","Increased likelihood of misleading consumers","Strengthening the product-place association"],answer:[0,1,3]},
+{question:"Which parameters are considered important while registering a Geographical Indication in India?",type:"msq",options:["Distinctiveness or uniqueness of the product","Historical linkage of the product with the region","Geographical location details such as latitude and longitude","Registration as a certification mark"],answer:[0,1,2]},
+{question:"Which statements correctly explain the registration and legal nature of Geographical Indications in India?",type:"msq",options:["Details of registered GIs are recorded in Part A and Part B of the GI Register","Any person can file an opposition against a GI application","GI registration is renewed every 10 years","A Geographical Indication represents a community right and an intellectual property right"],answer:[0,1,3]},
+/* ── WEEK 7 ── */
+{question:"An Indian electronics firm created an original layout design for a semiconductor IC and wishes to prevent unauthorized copying. Under which Indian statute can this be registered?",type:"mcq",options:["The Designs Act, 2000","The Patent Act, 1970","The Semiconductor IC Layout-Design Act, 2000","The Copyright Act, 1957"],answer:[2]},
 {question:"Which US legislation specifically provides protection to semiconductor chip (mask work) designs?",type:"mcq",options:["Integrated Circuit Protection Act","Semiconductor Chip Protection Act, 1984","Uniform Intellectual Property Act","Trade Secrets Protection Act"],answer:[1]},
 {question:"Correct objectives of protecting Semiconductor IC layout designs (1: safeguard physical config; 2: curb piracy; 3: regulate international trade):",type:"mcq",options:["Only 1 and 2","Only 2 and 3","Only 1 and 3","All of the above"],answer:[0]},
 {question:"Under the Semiconductor IC Layout-Design Act, 2000, what term is used for an entity permitted by the registered proprietor to use the layout design through licensing?",type:"mcq",options:["Registered proprietor","Registered user","Applicant","Authorized examiner"],answer:[1]},
-{question:"Eligibility for IC layout-design registration in India: S1: Only government bodies can apply. S2: Both individuals and organizations are eligible.",type:"mcq",options:["Both statements are true","Statement 1 true, Statement 2 false","Statement 1 false, Statement 2 true","Both statements are false"],answer:[2]},
+{question:"Statement 1: Only government bodies can apply for IC layout-design registration. Statement 2: Both individuals and organizations are eligible to apply for IC layout-design registration.",type:"mcq",options:["Both statements are true","Statement 1 is true and Statement 2 is false","Statement 1 is false and Statement 2 is true","Both statements are false"],answer:[2]},
 {question:"Total duration of legal protection for a registered Semiconductor IC layout-design in India:",type:"mcq",options:["5 years","10 years","15 years","20 years"],answer:[1]},
 {question:"Mask work protection for semiconductor chips is explicitly recognized under the law of which country?",type:"mcq",options:["India","United States of America","Japan","Both India and USA"],answer:[1]},
 {question:"Which legal framework primarily governs trade secret protection in the United States?",type:"mcq",options:["TRIPS Agreement","Uniform Trade Secrets Act (UTSA)","Indian Contract Act","Digital Millennium Copyright Act"],answer:[1]},
-{question:"Which legal provision is generally relied upon for enforcing trade secret protection in India against former employees?",type:"mcq",options:["Section 5 of the Indian Contract Act","Section 17 of the Indian Contract Act","Section 27 of the Indian Contract Act","The Patents Act, 1970"],answer:[2]},
+{question:"A company in India seeks to prevent former employees from disclosing confidential business information. Which legal provision is relied upon for enforcing trade secret protection in India?",type:"mcq",options:["Section 5 of the Indian Contract Act","Section 17 of the Indian Contract Act","Section 27 of the Indian Contract Act","The Patents Act, 1970"],answer:[2]},
 {question:"How long does legal protection for a trade secret last?",type:"mcq",options:["10 years","20 years","Until it is registered","As long as the information remains secret"],answer:[3]},
 {question:"Correct statements relating to mask work in semiconductor protection:",type:"msq",options:["Mask work refers to photographic masks used to transfer layered circuit patterns during fabrication","Legal protection for mask work is expressly available under U.S. law","Indian law provides a separate statutory protection for mask work","Mask work protection is identical to patent protection"],answer:[0,1]},
 {question:"Who is legally eligible to apply for IC layout-design registration in India?",type:"msq",options:["The individual who created the IC layout-design","The entity for whom the layout-design was created under contractual consideration","A lawful assignee of the layout-design","Any member of the public"],answer:[0,1,2]},
 {question:"Essential conditions an IC layout-design must satisfy to qualify for registration in India:",type:"msq",options:["It must be original","It should not have been commercially exploited in India or any convention country","It must be inherently distinctive","It should be distinguishable from existing registered layout-designs"],answer:[0,1,2,3]},
 {question:"Legal regimes in India that contribute to the protection of trade secrets:",type:"msq",options:["Contract law","Common law principles","Criminal law provisions","Design Act, 2000"],answer:[0,1,2]},
-{question:"Statements relating to patent and trade secret protection: S1: Patents involve risks such as public disclosure, opposition, and possible rejection. S2: Trade secret protection is preferred when invention is non-patentable or difficult to reverse engineer.",type:"msq",options:["S1 true, S2 false","S1 false, S2 true","Both S1 and S2 are true","Both S1 and S2 are false"],answer:[2]},
-/* ---------- ASSIGNMENT 8 ---------- */
+{question:"Statement 1: Patents involve risks such as public disclosure, opposition, and possible rejection. Statement 2: Trade secret protection is preferred when the invention is non-patentable or difficult to reverse engineer.",type:"msq",options:["Statement 1 is true, Statement 2 is false","Statement 1 is false, Statement 2 is true","Both Statement 1 and Statement 2 are true","Both Statement 1 and Statement 2 are false"],answer:[2]},
+/* ── WEEK 8 ── */
 {question:"Which combination of characteristics must a plant variety satisfy to obtain exclusive rights under the PPV&FR Act, 2001?",type:"mcq",options:["Novelty, marketability, and yield","Distinctiveness, uniformity, and stability","High productivity and pest resistance","Commercial acceptance and adaptability"],answer:[1]},
-{question:"Which of the following is a mandatory criterion for registration of a new plant variety in India?",type:"mcq",options:["Consumer preference","Distinctiveness","Export potential","Climate adaptability"],answer:[1]},
+{question:"Which is a mandatory criterion for registration of a new plant variety in India?",type:"mcq",options:["Consumer preference","Distinctiveness","Export potential","Climate adaptability"],answer:[1]},
 {question:"Under the PPV&FR Act, 2001, who is legally recognized as a farmer?",type:"mcq",options:["A person cultivating land personally","A person supervising agricultural operations","A person improving local or wild varieties through selection","All of the above"],answer:[3]},
-{question:"Which statement correctly reflects the legal position of plant variety protection in India?",type:"mcq",options:["Plant varieties are protected through patents","Plant varieties are protected under copyright law","Plant varieties are protected under a sui generis legislation","Plant varieties are not protected under Indian law"],answer:[2]},
+{question:"Which correctly reflects the legal position of plant variety protection in India?",type:"mcq",options:["Plant varieties are protected through patents","Plant varieties are protected under copyright law","Plant varieties are protected under a sui generis legislation","Plant varieties are not protected under Indian law"],answer:[2]},
 {question:"The acronym CBD stands for:",type:"mcq",options:["Convention on Biological Diversity","Conference on Biological Development","Convention on Botanical Documentation","Cooperation for Biodiversity Development"],answer:[0]},
 {question:"Which best represents the core objectives of the Convention on Biological Diversity (CBD)?",type:"mcq",options:["Conservation of biodiversity only","Sustainable use of biological resources only","Conservation, sustainable use, and benefit sharing","Commercial exploitation of genetic resources"],answer:[2]},
 {question:"A biological hotspot is best defined as:",type:"mcq",options:["A region with extreme climatic conditions","An area rich in biodiversity but under serious human threat","A location with maximum agricultural productivity","A fully protected conservation zone"],answer:[1]},
 {question:"Which form of intellectual property primarily protects the functional aspects of an invention?",type:"mcq",options:["Industrial Design","Trademark","Patent","Geographical Indication"],answer:[2]},
-{question:"Which of the following is a recognized type of Intellectual Property (IP) audit?",type:"mcq",options:["Revenue-based audit","General-purpose IP audit","Event-based audit","Technology depreciation audit"],answer:[1]},
-{question:"Which of the following is NOT a commonly accepted method for valuing intellectual property?",type:"mcq",options:["Cost-based method","Market-based method","Income-based method","Event-driven method"],answer:[3]},
+{question:"Which is a recognized type of Intellectual Property (IP) audit?",type:"mcq",options:["Revenue-based audit","General-purpose IP audit","Event-based audit","Technology depreciation audit"],answer:[1]},
+{question:"Which is NOT a commonly accepted method for valuing intellectual property?",type:"mcq",options:["Cost-based method","Market-based method","Income-based method","Event-driven method"],answer:[3]},
 {question:"For a new plant variety to qualify for registration under the PPV & FR Act, which conditions must be satisfied?",type:"msq",options:["The variety should show consistent expression of characteristics across plants","The distinguishing characteristics should remain unchanged over successive generations","The variety must be clearly distinguishable from all other known varieties","The variety must have high commercial demand in the market"],answer:[0,1,2]},
 {question:"Which categories of plant varieties are eligible for protection under the PPV&FR Act, 2001?",type:"msq",options:["Hybrid varieties created only for research purposes","Essentially derived varieties","Extant varieties","Farmer's varieties"],answer:[1,2,3]},
-{question:"Biodiversity refers to variability at which levels?",type:"msq",options:["Diversity within a species","Diversity only in cultivated crops","Diversity across ecosystems","Diversity among different species"],answer:[0,2,3]},
+{question:"Biodiversity, as understood under environmental and IP law frameworks, refers to variability at which levels?",type:"msq",options:["Diversity within a species","Diversity only in cultivated crops","Diversity across ecosystems","Diversity among different species"],answer:[0,2,3]},
 {question:"Factors that may negatively impact biodiversity in a given geographical region:",type:"msq",options:["Climate change and global warming","Large-scale deforestation","Adoption of plant-based dietary practices","Exclusive patenting of genetic resources"],answer:[0,1,3]},
 {question:"In which IP commercialization models does ownership of IPR remain with the original owner?",type:"msq",options:["Licensing of intellectual property","Assignment of intellectual property","Creation of start-up or entrepreneurship based on IP","Sale of intellectual property rights"],answer:[0,2]},
 ];
 
-// ── State ──
+/* ── State ── */
 let shuffled = [];
-let userAnswers = {}; // { index: Set of chosen option indices }
+let userAnswers = {};
 
 function shuffle(arr) {
   const a = [...arr];
@@ -477,6 +440,7 @@ function initQuiz() {
   userAnswers = {};
   document.getElementById('quiz-screen').style.display = 'block';
   document.getElementById('result-screen').style.display = 'none';
+  document.getElementById('warn-bar').style.display = 'none';
   renderQuestions();
   updateProgress();
 }
@@ -484,17 +448,16 @@ function initQuiz() {
 function renderQuestions() {
   const container = document.getElementById('questions-container');
   container.innerHTML = '';
+  const letters = ['A','B','C','D','E'];
 
   shuffled.forEach((q, i) => {
     const card = document.createElement('div');
     card.className = 'q-card';
-    card.style.animationDelay = `${Math.min(i * 0.03, 0.5)}s`;
-
-    const letters = ['A','B','C','D'];
+    card.style.animationDelay = `${Math.min(i * 0.025, 0.6)}s`;
 
     card.innerHTML = `
       <div class="q-meta">
-        <span class="q-num">Q${i+1}</span>
+        <span class="q-num">Q${i + 1}</span>
         <span class="q-badge badge-${q.type}">${q.type.toUpperCase()}</span>
       </div>
       <div class="q-text">${q.question}</div>
@@ -506,9 +469,8 @@ function renderQuestions() {
           </div>
         `).join('')}
       </div>
-      ${q.type==='msq'?'<div class="msq-hint">Select all correct answers</div>':''}
+      ${q.type === 'msq' ? '<p class="msq-hint">Select all correct answers</p>' : ''}
     `;
-
     container.appendChild(card);
   });
 }
@@ -518,16 +480,13 @@ function toggleOption(qIdx, oIdx) {
   if (!userAnswers[qIdx]) userAnswers[qIdx] = new Set();
 
   if (q.type === 'mcq') {
-    // single select
     userAnswers[qIdx].clear();
     userAnswers[qIdx].add(oIdx);
-    // update UI
     for (let i = 0; i < q.options.length; i++) {
       document.getElementById(`opt-${qIdx}-${i}`).classList.remove('selected');
     }
     document.getElementById(`opt-${qIdx}-${oIdx}`).classList.add('selected');
   } else {
-    // multi select toggle
     if (userAnswers[qIdx].has(oIdx)) {
       userAnswers[qIdx].delete(oIdx);
       document.getElementById(`opt-${qIdx}-${oIdx}`).classList.remove('selected');
@@ -553,19 +512,17 @@ function submitQuiz() {
 
   if (unanswered.length > 0) {
     warnBar.style.display = 'block';
-    warnBar.textContent = `⚠ ${unanswered.length} question${unanswered.length>1?'s are':' is'} unanswered. Please answer all before submitting.`;
+    warnBar.textContent = `⚠ ${unanswered.length} question${unanswered.length > 1 ? 's are' : ' is'} unanswered. You may submit anyway or answer them first.`;
     warnBar.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    return;
   }
 
-  warnBar.style.display = 'none';
   showResults();
 }
 
 function isCorrect(qIdx) {
   const q = shuffled[qIdx];
-  const chosen = userAnswers[qIdx] ? [...userAnswers[qIdx]].sort((a,b)=>a-b) : [];
-  const correct = [...q.answer].sort((a,b)=>a-b);
+  const chosen = userAnswers[qIdx] ? [...userAnswers[qIdx]].sort((a, b) => a - b) : [];
+  const correct = [...q.answer].sort((a, b) => a - b);
   return JSON.stringify(chosen) === JSON.stringify(correct);
 }
 
@@ -582,19 +539,16 @@ function showResults() {
 
   const pct = Math.round((correct / total) * 100);
 
-  // Switch screens
   document.getElementById('quiz-screen').style.display = 'none';
   document.getElementById('result-screen').style.display = 'block';
   window.scrollTo({ top: 0, behavior: 'smooth' });
 
-  // Stats
   document.getElementById('stat-correct').textContent = correct;
   document.getElementById('stat-wrong').textContent = wrong;
   document.getElementById('stat-skip').textContent = skipped;
   document.getElementById('stat-total').textContent = total;
   document.getElementById('pct-num').textContent = pct;
 
-  // Circle
   const circumference = 502;
   const offset = circumference - (pct / 100) * circumference;
   const fill = document.getElementById('circle-fill');
@@ -603,7 +557,6 @@ function showResults() {
   document.getElementById('pct-num').style.color = color;
   setTimeout(() => { fill.style.strokeDashoffset = offset; }, 100);
 
-  // Title
   const titles = [
     [90, 'Outstanding! 🏆', 'You have an exceptional grasp of IP law.'],
     [75, 'Great Work! 🎉', 'Strong understanding across most topics.'],
@@ -618,20 +571,19 @@ function showResults() {
     }
   }
 
-  // Review wrong/skipped
   const wrongSection = document.getElementById('wrong-section');
   const reviewContainer = document.getElementById('review-container');
   reviewContainer.innerHTML = '';
 
-  const wrongOnes = shuffled.map((q, i) => ({q, i})).filter(({i}) => !isCorrect(i));
+  const wrongOnes = shuffled.map((q, i) => ({ q, i })).filter(({ i }) => !isCorrect(i));
 
   if (wrongOnes.length === 0) {
     wrongSection.style.display = 'none';
   } else {
     wrongSection.style.display = 'block';
-    const letters = ['A','B','C','D'];
+    const letters = ['A','B','C','D','E'];
 
-    wrongOnes.forEach(({q, i}, ri) => {
+    wrongOnes.forEach(({ q, i }, ri) => {
       const chosen = userAnswers[i] ? new Set(userAnswers[i]) : new Set();
       const correct_set = new Set(q.answer);
 
@@ -642,10 +594,8 @@ function showResults() {
         let cls = '';
         const isChosen = chosen.has(oi);
         const isCorrectOpt = correct_set.has(oi);
-
         if (isCorrectOpt) cls = 'correct';
         else if (isChosen && !isCorrectOpt) cls = 'wrong';
-
         return `
           <div class="option ${cls}" style="cursor:default">
             <div class="opt-bullet">${letters[oi]}</div>
@@ -658,7 +608,7 @@ function showResults() {
 
       card.innerHTML = `
         <div class="q-meta">
-          <span class="q-num" style="color:var(--red)">Wrong #${ri+1}</span>
+          <span class="q-num" style="color:var(--red)">Wrong #${ri + 1}</span>
           <span class="q-badge badge-${q.type}">${q.type.toUpperCase()}</span>
           ${skippedLabel}
         </div>
@@ -675,7 +625,6 @@ function retryQuiz() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Boot
 initQuiz();
 </script>
 </body>
