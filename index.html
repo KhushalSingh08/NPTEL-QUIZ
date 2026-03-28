@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IPR Quiz — NPTEL</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --surface: #161920;
+    --surface2: #1e2230;
+    --border: #2a2f3f;
+    --accent: #4f8ef7;
+    --accent2: #7c5cbf;
+    --green: #3ecf8e;
+    --red: #f75f5f;
+    --yellow: #f7c948;
+    --text: #e8eaf0;
+    --muted: #7a8099;
+    --radius: 14px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background mesh */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 20% 10%, rgba(79,142,247,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 35% at 80% 80%, rgba(124,92,191,0.08) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap { position: relative; z-index: 1; max-width: 820px; margin: 0 auto; padding: 0 20px 60px; }
+
+  /* ── Header ── */
+  header {
+    padding: 36px 0 28px;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .tag {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px; font-weight: 700; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--accent);
+    opacity: 0.85;
+  }
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(26px, 5vw, 40px);
+    font-weight: 800; line-height: 1.15;
+  }
+  .subtitle { font-size: 14px; color: var(--muted); margin-top: 4px; }
+
+  /* ── Progress bar ── */
+  .progress-wrap {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 28px;
+  }
+  .progress-bar-bg {
+    flex: 1; height: 4px; background: var(--border); border-radius: 99px; overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 99px; transition: width 0.4s ease;
+  }
+  .progress-label { font-size: 13px; color: var(--muted); white-space: nowrap; }
+
+  /* ── Question card ── */
+  .q-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 28px 24px;
+    margin-bottom: 18px;
+    transition: border-color 0.2s;
+  }
+  .q-card:hover { border-color: #3a3f54; }
+
+  .q-meta {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 14px;
+  }
+  .q-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    color: var(--muted); text-transform: uppercase;
+  }
+  .q-badge {
+    font-size: 10px; font-weight: 600; letter-spacing: 1px;
+    text-transform: uppercase; padding: 3px 8px;
+    border-radius: 99px;
+  }
+  .badge-mcq { background: rgba(79,142,247,0.15); color: var(--accent); }
+  .badge-msq { background: rgba(124,92,191,0.15); color: #a07de0; }
+
+  .q-text {
+    font-size: 16px; line-height: 1.6; font-weight: 400;
+    margin-bottom: 18px; color: var(--text);
+  }
+
+  /* Options */
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .option {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--surface2); border: 1.5px solid var(--border);
+    border-radius: 10px; padding: 13px 16px;
+    cursor: pointer; transition: all 0.18s;
+    user-select: none;
+  }
+  .option:hover { border-color: var(--accent); background: rgba(79,142,247,0.06); }
+  .option.selected { border-color: var(--accent); background: rgba(79,142,247,0.12); }
+
+  /* Review states */
+  .option.correct  { border-color: var(--green)!important; background: rgba(62,207,142,0.10)!important; }
+  .option.wrong    { border-color: var(--red)!important;   background: rgba(247,95,95,0.10)!important;  }
+  .option.missed   { border-color: var(--yellow)!important; background: rgba(247,201,72,0.10)!important; }
+
+  .opt-bullet {
+    width: 22px; height: 22px; border-radius: 50%;
+    border: 2px solid var(--border); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; color: var(--muted);
+    transition: all 0.18s;
+  }
+  .option.selected .opt-bullet,
+  .option.correct  .opt-bullet { border-color: var(--accent); background: var(--accent); color: #fff; }
+  .option.wrong    .opt-bullet { border-color: var(--red);    background: var(--red);    color: #fff; }
+  .option.missed   .opt-bullet { border-color: var(--yellow); background: var(--yellow); color: #111; }
+
+  .opt-text { font-size: 14.5px; line-height: 1.5; }
+
+  .msq-hint {
+    font-size: 12px; color: var(--muted); margin-top: 8px;
+    font-style: italic;
+  }
+
+  /* ── Submit ── */
+  .submit-wrap {
+    display: flex; justify-content: center; padding: 10px 0 20px;
+  }
+  .btn-submit {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff; border: none; border-radius: 10px;
+    padding: 16px 52px; cursor: pointer;
+    box-shadow: 0 4px 24px rgba(79,142,247,0.25);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 6px 32px rgba(79,142,247,0.38); }
+  .btn-submit:active { transform: translateY(0); }
+
+  /* ── Result screen ── */
+  #result-screen { display: none; }
+
+  .result-hero {
+    display: flex; flex-direction: column; align-items: center;
+    padding: 48px 20px 36px; text-align: center;
+  }
+
+  /* Circular progress */
+  .circle-wrap { position: relative; width: 180px; height: 180px; margin-bottom: 28px; }
+  .circle-svg { transform: rotate(-90deg); }
+  .circle-bg   { fill: none; stroke: var(--surface2); stroke-width: 14; }
+  .circle-fill { fill: none; stroke-width: 14; stroke-linecap: round;
+                 stroke-dasharray: 502; stroke-dashoffset: 502;
+                 transition: stroke-dashoffset 1.4s cubic-bezier(.4,0,.2,1); }
+  .circle-label {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .pct-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 40px; font-weight: 800; line-height: 1;
+  }
+  .pct-sym { font-size: 18px; font-weight: 600; color: var(--muted); }
+
+  .result-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 26px; font-weight: 800; margin-bottom: 8px;
+  }
+  .result-sub { font-size: 15px; color: var(--muted); margin-bottom: 30px; }
+
+  .stats-row {
+    display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+    margin-bottom: 40px;
+  }
+  .stat-chip {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 22px; text-align: center; min-width: 100px;
+  }
+  .stat-val { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; }
+  .stat-label { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  /* Wrong answers review */
+  .review-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 22px 24px;
+    margin-bottom: 14px;
+  }
+  .review-q { font-size: 15px; line-height: 1.6; margin-bottom: 14px; color: var(--text); }
+  .review-opts { display: flex; flex-direction: column; gap: 8px; }
+
+  .btn-retry {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase;
+    background: transparent;
+    border: 2px solid var(--accent); color: var(--accent);
+    border-radius: 10px; padding: 14px 40px; cursor: pointer;
+    transition: all 0.18s; margin-top: 36px;
+  }
+  .btn-retry:hover { background: var(--accent); color: #fff; }
+
+  /* Unanswered warning */
+  .warn-bar {
+    background: rgba(247,201,72,0.12); border: 1px solid rgba(247,201,72,0.3);
+    border-radius: 10px; padding: 12px 18px;
+    font-size: 13.5px; color: var(--yellow);
+    margin-bottom: 20px; display: none;
+  }
+
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(18px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+  .q-card { animation: fadeUp 0.35s ease both; }
+
+  @media (max-width: 540px) {
+    .q-card { padding: 20px 16px; }
+    .btn-submit { padding: 14px 36px; }
+    .stats-row { gap: 10px; }
+    .stat-chip { padding: 12px 16px; min-width: 80px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ── Quiz screen ── -->
+  <div id="quiz-screen">
+    <header>
+      <span class="tag">NPTEL · IIT Kharagpur</span>
+      <h1>Intellectual Property Rights</h1>
+      <p class="subtitle">Introduction to IP for Engineers &amp; Technologists · All Assignments</p>
+    </header>
+
+    <div class="progress-wrap">
+      <div class="progress-bar-bg"><div class="progress-bar-fill" id="prog-fill" style="width:0%"></div></div>
+      <span class="progress-label" id="prog-label">0 / 0 answered</span>
+    </div>
+
+    <div class="warn-bar" id="warn-bar">⚠ Some questions are unanswered. Please answer all before submitting.</div>
+
+    <div id="questions-container"></div>
+
+    <div class="submit-wrap">
+      <button class="btn-submit" onclick="submitQuiz()">Submit Test</button>
+    </div>
+  </div>
+
+  <!-- ── Result screen ── -->
+  <div id="result-screen">
+    <header>
+      <span class="tag">NPTEL · IIT Kharagpur</span>
+      <h1>Your Results</h1>
+    </header>
+
+    <div class="result-hero">
+      <div class="circle-wrap">
+        <svg class="circle-svg" width="180" height="180" viewBox="0 0 180 180">
+          <circle class="circle-bg" cx="90" cy="90" r="80"/>
+          <circle class="circle-fill" id="circle-fill" cx="90" cy="90" r="80"/>
+        </svg>
+        <div class="circle-label">
+          <span class="pct-num" id="pct-num">0</span>
+          <span class="pct-sym">%</span>
+        </div>
+      </div>
+      <div class="result-title" id="result-title">—</div>
+      <div class="result-sub" id="result-sub"></div>
+
+      <div class="stats-row">
+        <div class="stat-chip">
+          <div class="stat-val" id="stat-correct" style="color:var(--green)">0</div>
+          <div class="stat-label">Correct</div>
+        </div>
+        <div class="stat-chip">
+          <div class="stat-val" id="stat-wrong" style="color:var(--red)">0</div>
+          <div class="stat-label">Wrong</div>
+        </div>
+        <div class="stat-chip">
+          <div class="stat-val" id="stat-skip" style="color:var(--yellow)">0</div>
+          <div class="stat-label">Skipped</div>
+        </div>
+        <div class="stat-chip">
+          <div class="stat-val" id="stat-total" style="color:var(--muted)">0</div>
+          <div class="stat-label">Total</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="wrong-section" style="display:none">
+      <p class="section-title">Review — Incorrect &amp; Skipped</p>
+      <div id="review-container"></div>
+    </div>
+
+    <div style="display:flex;justify-content:center">
+      <button class="btn-retry" onclick="retryQuiz()">↩ Retry Quiz</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const allQuestions=[
+/* ---------- ASSIGNMENT 1 ---------- */
+{question:"IP rights are granted for a limited duration because:",type:"mcq",options:["Increase cost of creation","Balance creator reward with public access","Permanent monopoly","Creations lose value"],answer:[1]},
+{question:"Intellectual property refers to:",type:"mcq",options:["Physical property","Public goods","Creations of the mind with exclusive rights","Government data"],answer:[2]},
+{question:"Which is NOT part of property ownership rights?",type:"mcq",options:["Right to use","Right to license","Right to exclude","Right to terminate legislation"],answer:[3]},
+{question:"Trade secrets are suitable when invention can be easily reverse engineered.",type:"mcq",options:["True","False","Depends","Always protected"],answer:[1]},
+{question:"Personality theory mainly applies to:",type:"mcq",options:["Patents","Copyright and industrial design","Trade secrets","Geographical indications"],answer:[1]},
+{question:"Protection of new plant varieties falls under:",type:"mcq",options:["Trade secret","Industrial design","Patent","Plant variety rights"],answer:[3]},
+{question:"Geographical indications reward:",type:"mcq",options:["Companies","Communities producing regional goods","Patent offices","Scientists"],answer:[1]},
+{question:"Patent duration in India:",type:"mcq",options:["10 years","15 years","20 years","25 years"],answer:[2]},
+{question:"Trademark mainly protects:",type:"mcq",options:["Scientific discoveries","Brand identifiers","Processes","Chemicals"],answer:[1]},
+{question:"Industrial design protects:",type:"mcq",options:["Appearance of article","Software code","Manufacturing process","Trade secret"],answer:[0]},
+{question:"Reasons IPR protection exists:",type:"msq",options:["Information easy to copy","Encourage innovation","Public benefit","Prevent competition"],answer:[0,1,2]},
+{question:"Importance of IPR knowledge for engineers:",type:"msq",options:["Evaluate patents","Avoid infringement","Protect ideas forever","Enable licensing"],answer:[0,1,3]},
+{question:"Labor theory suggests:",type:"msq",options:["Reward intellectual work","Only physical labor","Justifies exclusive rights","Proposed by John Locke"],answer:[0,2,3]},
+{question:"Examples of trade secrets:",type:"msq",options:["Secret formula","Public specification","Private source code","Logo"],answer:[0,2]},
+{question:"Touchscreen software and coating formula protected by:",type:"msq",options:["Copyright","Trademark","Trade secret","Industrial design"],answer:[0,2]},
+/* ---------- ASSIGNMENT 2 ---------- */
+{question:"Patent negative right means:",type:"mcq",options:["Use invention freely","Prevent others using invention","Keep invention secret","Automatic global rights"],answer:[1]},
+{question:"Routine engineering improvement:",type:"mcq",options:["Always patentable","Not patentable lacking inventive step","Patentable always","Trade secret only"],answer:[1]},
+{question:"Which is an invention?",type:"mcq",options:["Finding mineral","Identifying natural gene","Synthetic compound variant","Oil location discovery"],answer:[2]},
+{question:"Prior claiming refers to:",type:"mcq",options:["Journal article","Earlier patent claiming same invention","Public demonstration","Lab test"],answer:[1]},
+{question:"New drug form without improved efficacy:",type:"mcq",options:["Patentable","Not patentable","Depends on country","Always patentable"],answer:[1]},
+{question:"Violation of natural law:",type:"mcq",options:["Improved engine","Water flowing uphill without energy","Control software","Aerospace alloy"],answer:[1]},
+{question:"Prior art search done to:",type:"mcq",options:["Improve marketing","Avoid duplicate inventions","Increase patents","Lower taxes"],answer:[1]},
+{question:"Research paper describing invention:",type:"mcq",options:["Not prior art","Counts as prior art","Valid only if patent","Only recent papers count"],answer:[1]},
+{question:"Complete specification must be filed within:",type:"mcq",options:["6 months","12 months","18 months","24 months"],answer:[1]},
+{question:"Provisional specification establishes:",type:"mcq",options:["Patent grant","Priority date","Ownership","Expiry date"],answer:[1]},
+{question:"Academic research with patented tech:",type:"msq",options:["Non commercial exemption","Publishing removes patent rights","Commercial use infringement","Rules vary by country"],answer:[0,2,3]},
+{question:"Patent claims:",type:"msq",options:["Define boundaries","Supported by specification","Title defines scope","Unsupported broad claims rejected"],answer:[0,1,3]},
+{question:"Not patentable due to ethics:",type:"msq",options:["Tobacco inventions","Diagnostic kits","Medical treatment methods","Engine devices"],answer:[0,2]},
+{question:"Prior art search methods:",type:"msq",options:["Keyword search","Patent classification","Random browsing","Boolean operators"],answer:[0,1,3]},
+{question:"Inventors may include:",type:"msq",options:["Professors","Research scholars","Fabricators with contribution","Assistants with significant input"],answer:[0,1,2,3]},
+/* ---------- ASSIGNMENT 3 ---------- */
+{question:"Provisional patent specification excludes:",type:"mcq",options:["Essential features","Title","Abstract","Claims"],answer:[3]},
+{question:"Correct patent procedure:",type:"mcq",options:["File→FER→Publication","File→Publication→Exam→FER","File→Grant→FER","FER→File"],answer:[1]},
+{question:"If main patent revoked:",type:"mcq",options:["Addition revoked","Cannot renew","Becomes independent","Loses rights"],answer:[2]},
+{question:"Annual requirement for patent:",type:"mcq",options:["Amend claims","Working statement","Addition filing","Compulsory license"],answer:[1]},
+{question:"Paris Convention priority:",type:"mcq",options:["6 months","12 months","18 months","24 months"],answer:[1]},
+{question:"Filing abroad without IPO permission:",type:"mcq",options:["Allowed","Illegal","Optional","Depends"],answer:[1]},
+{question:"Research use of patented product:",type:"mcq",options:["Allowed","Illegal","Commercial use allowed","Patent void"],answer:[0]},
+{question:"Direct infringement:",type:"mcq",options:["Authorized use","Unauthorized making/selling","Research use","Education use"],answer:[1]},
+{question:"Patent manager role:",type:"mcq",options:["Only filing","Integrate creation transaction enforcement","Marketing","Research"],answer:[1]},
+{question:"Competitor using patented process:",type:"mcq",options:["Ignore","File lawsuit","Sell patent","Promote competitor"],answer:[1]},
+{question:"Opposition steps:",type:"msq",options:["Pre-grant opposition","Post-grant opposition","Provide evidence","Automatic compensation"],answer:[0,1,2]},
+{question:"Patent renewal facts:",type:"msq",options:["Annual fee needed","Immediate permanent loss","Restoration possible","Restoration after 5 years"],answer:[0,2]},
+{question:"PCT advantages:",type:"msq",options:["Single application","31-month national phase","No national fees","International search report"],answer:[0,1,3]},
+{question:"Patent infringement examples:",type:"msq",options:["Manufacturing patented drug","Supplying essential components","Research use","Hospital treatment"],answer:[0,1]},
+{question:"Patent revenue generation:",type:"msq",options:["Licensing","Infringement damages","IP audit","Selling patents"],answer:[0,1,3]},
+/* ---------- ASSIGNMENT 4 ---------- */
+{question:"Utility models suitable for SMEs because:",type:"mcq",options:["High cost","Long process","Faster cheaper protection","20 year monopoly"],answer:[2]},
+{question:"Utility model duration:",type:"mcq",options:["3 years","5 years","7-10 years","20 years"],answer:[2]},
+{question:"Requirement for copyright:",type:"mcq",options:["Novelty","Industrial use","Originality","Inventive step"],answer:[2]},
+{question:"Copyright duration in India:",type:"mcq",options:["Life+40","Life+50","Life+60","Life+70"],answer:[2]},
+{question:"Copyright registration mandatory:",type:"mcq",options:["Yes","No","Sometimes","International only"],answer:[1]},
+{question:"Copyright exists in:",type:"mcq",options:["Idea","Tangible expression","Fact","Public domain"],answer:[1]},
+{question:"Primary copyright infringement:",type:"mcq",options:["Direct copying","Helping copying","Teaching use","Research"],answer:[0]},
+{question:"Plagiarism means:",type:"mcq",options:["Citation","Using others work as own","Fair use","Legal copy"],answer:[1]},
+{question:"Software copyright test US:",type:"mcq",options:["Similarity test","AFC test","Fair use test","Plagiarism test"],answer:[1]},
+{question:"International copyright treaty:",type:"mcq",options:["DMCA","Berne Convention","WIPO","EU directive"],answer:[1]},
+{question:"Patent vs utility models:",type:"msq",options:["Higher inventive step","Longer patent protection","Utility models incremental","Only biotech"],answer:[0,1,2]},
+{question:"Copyright protects:",type:"msq",options:["Dialogues","Characters","Plot idea","Writing style"],answer:[0,1,3]},
+{question:"Copyright ownership:",type:"msq",options:["Author first owner","Freelancer auto transfer","Employment contract transfer","Author always owner"],answer:[0,2]},
+{question:"Secondary infringement:",type:"msq",options:["Sharing tools","Hosting piracy","Selling legal copies","Embedding infringing video"],answer:[0,1,3]},
+{question:"Fair use examples:",type:"msq",options:["Teaching copies","Free software download","Class demonstration","Selling recordings"],answer:[0,2]},
+/* ---------- ASSIGNMENT 5 ---------- */
+{question:"Industrial design protection requires:",type:"mcq",options:["Disclosure","Journal publication","Registration","Drawing submission"],answer:[2]},
+{question:"Industrial design protects:",type:"mcq",options:["Artistic features","Aesthetic features","Both","Functional"],answer:[1]},
+{question:"Design not eligible if:",type:"mcq",options:["No novelty","Already disclosed","Obscene","All"],answer:[3]},
+{question:"Design registration statement:",type:"mcq",options:["Cancellation possible","Must be new original","Both true","Both false"],answer:[0]},
+{question:"Article definition:",type:"mcq",options:["Movable manufactured item","Building","Unsellable component","Printed text"],answer:[0]},
+{question:"Logo protection type:",type:"mcq",options:["Copyright","Trademark","Patent","Trade secret"],answer:[1]},
+{question:"Trademark rights nature:",type:"mcq",options:["Mandatory registration","Purely registration","Use based right","Only registered"],answer:[2]},
+{question:"Trademark cancelled after non use:",type:"mcq",options:["2 years","3 years","5 years","7 years"],answer:[2]},
+{question:"Trade dress includes:",type:"mcq",options:["Packaging","Shape","Colour","All"],answer:[3]},
+{question:"Design applied to:",type:"mcq",options:["Article","Paper","Board","Icon"],answer:[0]},
+/* ---------- ASSIGNMENT 6 ---------- */
+{question:"The Uniform Domain Name Dispute Resolution Policy (UDRP) was established by which organization?",type:"mcq",options:["USPTO","ICANN","United Nations","World Trade Organization"],answer:[1]},
+{question:"Registering domain names identical or confusingly similar to well-known trademarks with the intention of selling them for profit is known as:",type:"mcq",options:["Meta tagging","Framing","Cybersquatting","Domain name parking"],answer:[2]},
+{question:"A Hallmark used to certify the quality or standard of goods is classified as a:",type:"mcq",options:["Brand name","Certification mark","Collective mark","Trade name"],answer:[1]},
+{question:"Which statement is true regarding certification and collective marks? (S1: A certification mark can be registered by a proprietor of goods or services. S2: A collective mark can be registered by a proprietor of goods or services.)",type:"mcq",options:["Only Statement 1 is true","Only Statement 2 is true","Both statements are true","Both statements are false"],answer:[0]},
+{question:"The protection of geographical indication in India is available for:",type:"mcq",options:["Goods","Services","Both goods and services","Arts"],answer:[0]},
+{question:"Geographical Indications primarily indicate:",type:"mcq",options:["The geographical location of manufacture","A link between product characteristics and the region of origin","Ownership of goods","Industrial manufacturing standards"],answer:[1]},
+{question:"Who is legally permitted to use a registered Geographical Indication in India?",type:"mcq",options:["Any person residing in the geographical region","Any person dealing in the goods","A producer of the goods","An authorised user"],answer:[3]},
+{question:"Under the GI of Goods Act, who is legally entitled to file an application for registration of a GI in India?",type:"mcq",options:["Any trader dealing in the goods","A producer of the goods","A consumer association","A legal heir of the producer"],answer:[1]},
+{question:"Which of the following is NOT a registered Geographical Indication?",type:"mcq",options:["Scottish Whisky","Basmati Rice","Indian Neem Tree","Agra Petha"],answer:[2]},
+{question:"Which statement regarding Geographical Indication (GI) rights is correct?",type:"mcq",options:["GI rights can be licensed","GI rights are not transferable","GI rights automatically pass to legal heirs","GI rights are private individual rights"],answer:[1]},
+{question:"Implications of deep linking and framing in the context of domain names and trademarks:",type:"msq",options:["Likelihood of consumer confusion","Resale of goods without authorization","Possible loss of revenue to the trademark owner","Automatic transfer of trademark rights"],answer:[0,2]},
+{question:"Geographical indication in India is protected by:",type:"msq",options:["Certification Mark","Collective Mark","Separate Act","Common Act"],answer:[0,2]},
+{question:"Benefits associated with protection of Geographical Indications (GIs):",type:"msq",options:["Promotion of regional economic development","Preservation of traditional knowledge and cultural heritage","Increased likelihood of misleading consumers","Strengthening the product–place association"],answer:[0,1,3]},
+{question:"Parameters considered important while registering a Geographical Indication in India:",type:"msq",options:["Distinctiveness or uniqueness of the product","Historical linkage of the product with the region","Geographical location details such as latitude and longitude","Registration as a certification mark"],answer:[0,1,2]},
+{question:"Statements correctly explaining the registration and legal nature of GIs in India:",type:"msq",options:["Details of registered GIs are recorded in Part A and Part B of the GI Register","Any person can file an opposition against a GI application","GI registration is renewed every 10 years","A GI represents a community right and an intellectual property right"],answer:[0,1,3]},
+/* ---------- ASSIGNMENT 7 ---------- */
+{question:"Under which Indian statute can a semiconductor IC layout design be registered and protected?",type:"mcq",options:["The Designs Act, 2000","The Patent Act, 1970","The Semiconductor IC Layout-Design Act, 2000","The Copyright Act, 1957"],answer:[2]},
+{question:"Which US legislation specifically provides protection to semiconductor chip (mask work) designs?",type:"mcq",options:["Integrated Circuit Protection Act","Semiconductor Chip Protection Act, 1984","Uniform Intellectual Property Act","Trade Secrets Protection Act"],answer:[1]},
+{question:"Correct objectives of protecting Semiconductor IC layout designs (1: safeguard physical config; 2: curb piracy; 3: regulate international trade):",type:"mcq",options:["Only 1 and 2","Only 2 and 3","Only 1 and 3","All of the above"],answer:[0]},
+{question:"Under the Semiconductor IC Layout-Design Act, 2000, what term is used for an entity permitted by the registered proprietor to use the layout design through licensing?",type:"mcq",options:["Registered proprietor","Registered user","Applicant","Authorized examiner"],answer:[1]},
+{question:"Eligibility for IC layout-design registration in India: S1: Only government bodies can apply. S2: Both individuals and organizations are eligible.",type:"mcq",options:["Both statements are true","Statement 1 true, Statement 2 false","Statement 1 false, Statement 2 true","Both statements are false"],answer:[2]},
+{question:"Total duration of legal protection for a registered Semiconductor IC layout-design in India:",type:"mcq",options:["5 years","10 years","15 years","20 years"],answer:[1]},
+{question:"Mask work protection for semiconductor chips is explicitly recognized under the law of which country?",type:"mcq",options:["India","United States of America","Japan","Both India and USA"],answer:[1]},
+{question:"Which legal framework primarily governs trade secret protection in the United States?",type:"mcq",options:["TRIPS Agreement","Uniform Trade Secrets Act (UTSA)","Indian Contract Act","Digital Millennium Copyright Act"],answer:[1]},
+{question:"Which legal provision is generally relied upon for enforcing trade secret protection in India against former employees?",type:"mcq",options:["Section 5 of the Indian Contract Act","Section 17 of the Indian Contract Act","Section 27 of the Indian Contract Act","The Patents Act, 1970"],answer:[2]},
+{question:"How long does legal protection for a trade secret last?",type:"mcq",options:["10 years","20 years","Until it is registered","As long as the information remains secret"],answer:[3]},
+{question:"Correct statements relating to mask work in semiconductor protection:",type:"msq",options:["Mask work refers to photographic masks used to transfer layered circuit patterns during fabrication","Legal protection for mask work is expressly available under U.S. law","Indian law provides a separate statutory protection for mask work","Mask work protection is identical to patent protection"],answer:[0,1]},
+{question:"Who is legally eligible to apply for IC layout-design registration in India?",type:"msq",options:["The individual who created the IC layout-design","The entity for whom the layout-design was created under contractual consideration","A lawful assignee of the layout-design","Any member of the public"],answer:[0,1,2]},
+{question:"Essential conditions an IC layout-design must satisfy to qualify for registration in India:",type:"msq",options:["It must be original","It should not have been commercially exploited in India or any convention country","It must be inherently distinctive","It should be distinguishable from existing registered layout-designs"],answer:[0,1,2,3]},
+{question:"Legal regimes in India that contribute to the protection of trade secrets:",type:"msq",options:["Contract law","Common law principles","Criminal law provisions","Design Act, 2000"],answer:[0,1,2]},
+{question:"Statements relating to patent and trade secret protection: S1: Patents involve risks such as public disclosure, opposition, and possible rejection. S2: Trade secret protection is preferred when invention is non-patentable or difficult to reverse engineer.",type:"msq",options:["S1 true, S2 false","S1 false, S2 true","Both S1 and S2 are true","Both S1 and S2 are false"],answer:[2]},
+/* ---------- ASSIGNMENT 8 ---------- */
+{question:"Which combination of characteristics must a plant variety satisfy to obtain exclusive rights under the PPV&FR Act, 2001?",type:"mcq",options:["Novelty, marketability, and yield","Distinctiveness, uniformity, and stability","High productivity and pest resistance","Commercial acceptance and adaptability"],answer:[1]},
+{question:"Which of the following is a mandatory criterion for registration of a new plant variety in India?",type:"mcq",options:["Consumer preference","Distinctiveness","Export potential","Climate adaptability"],answer:[1]},
+{question:"Under the PPV&FR Act, 2001, who is legally recognized as a farmer?",type:"mcq",options:["A person cultivating land personally","A person supervising agricultural operations","A person improving local or wild varieties through selection","All of the above"],answer:[3]},
+{question:"Which statement correctly reflects the legal position of plant variety protection in India?",type:"mcq",options:["Plant varieties are protected through patents","Plant varieties are protected under copyright law","Plant varieties are protected under a sui generis legislation","Plant varieties are not protected under Indian law"],answer:[2]},
+{question:"The acronym CBD stands for:",type:"mcq",options:["Convention on Biological Diversity","Conference on Biological Development","Convention on Botanical Documentation","Cooperation for Biodiversity Development"],answer:[0]},
+{question:"Which best represents the core objectives of the Convention on Biological Diversity (CBD)?",type:"mcq",options:["Conservation of biodiversity only","Sustainable use of biological resources only","Conservation, sustainable use, and benefit sharing","Commercial exploitation of genetic resources"],answer:[2]},
+{question:"A biological hotspot is best defined as:",type:"mcq",options:["A region with extreme climatic conditions","An area rich in biodiversity but under serious human threat","A location with maximum agricultural productivity","A fully protected conservation zone"],answer:[1]},
+{question:"Which form of intellectual property primarily protects the functional aspects of an invention?",type:"mcq",options:["Industrial Design","Trademark","Patent","Geographical Indication"],answer:[2]},
+{question:"Which of the following is a recognized type of Intellectual Property (IP) audit?",type:"mcq",options:["Revenue-based audit","General-purpose IP audit","Event-based audit","Technology depreciation audit"],answer:[1]},
+{question:"Which of the following is NOT a commonly accepted method for valuing intellectual property?",type:"mcq",options:["Cost-based method","Market-based method","Income-based method","Event-driven method"],answer:[3]},
+{question:"For a new plant variety to qualify for registration under the PPV & FR Act, which conditions must be satisfied?",type:"msq",options:["The variety should show consistent expression of characteristics across plants","The distinguishing characteristics should remain unchanged over successive generations","The variety must be clearly distinguishable from all other known varieties","The variety must have high commercial demand in the market"],answer:[0,1,2]},
+{question:"Which categories of plant varieties are eligible for protection under the PPV&FR Act, 2001?",type:"msq",options:["Hybrid varieties created only for research purposes","Essentially derived varieties","Extant varieties","Farmer's varieties"],answer:[1,2,3]},
+{question:"Biodiversity refers to variability at which levels?",type:"msq",options:["Diversity within a species","Diversity only in cultivated crops","Diversity across ecosystems","Diversity among different species"],answer:[0,2,3]},
+{question:"Factors that may negatively impact biodiversity in a given geographical region:",type:"msq",options:["Climate change and global warming","Large-scale deforestation","Adoption of plant-based dietary practices","Exclusive patenting of genetic resources"],answer:[0,1,3]},
+{question:"In which IP commercialization models does ownership of IPR remain with the original owner?",type:"msq",options:["Licensing of intellectual property","Assignment of intellectual property","Creation of start-up or entrepreneurship based on IP","Sale of intellectual property rights"],answer:[0,2]},
+];
+
+// ── State ──
+let shuffled = [];
+let userAnswers = {}; // { index: Set of chosen option indices }
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function initQuiz() {
+  shuffled = shuffle(allQuestions);
+  userAnswers = {};
+  document.getElementById('quiz-screen').style.display = 'block';
+  document.getElementById('result-screen').style.display = 'none';
+  renderQuestions();
+  updateProgress();
+}
+
+function renderQuestions() {
+  const container = document.getElementById('questions-container');
+  container.innerHTML = '';
+
+  shuffled.forEach((q, i) => {
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.style.animationDelay = `${Math.min(i * 0.03, 0.5)}s`;
+
+    const letters = ['A','B','C','D'];
+
+    card.innerHTML = `
+      <div class="q-meta">
+        <span class="q-num">Q${i+1}</span>
+        <span class="q-badge badge-${q.type}">${q.type.toUpperCase()}</span>
+      </div>
+      <div class="q-text">${q.question}</div>
+      <div class="options" id="opts-${i}">
+        ${q.options.map((opt, oi) => `
+          <div class="option" id="opt-${i}-${oi}" onclick="toggleOption(${i},${oi})">
+            <div class="opt-bullet">${letters[oi]}</div>
+            <div class="opt-text">${opt}</div>
+          </div>
+        `).join('')}
+      </div>
+      ${q.type==='msq'?'<div class="msq-hint">Select all correct answers</div>':''}
+    `;
+
+    container.appendChild(card);
+  });
+}
+
+function toggleOption(qIdx, oIdx) {
+  const q = shuffled[qIdx];
+  if (!userAnswers[qIdx]) userAnswers[qIdx] = new Set();
+
+  if (q.type === 'mcq') {
+    // single select
+    userAnswers[qIdx].clear();
+    userAnswers[qIdx].add(oIdx);
+    // update UI
+    for (let i = 0; i < q.options.length; i++) {
+      document.getElementById(`opt-${qIdx}-${i}`).classList.remove('selected');
+    }
+    document.getElementById(`opt-${qIdx}-${oIdx}`).classList.add('selected');
+  } else {
+    // multi select toggle
+    if (userAnswers[qIdx].has(oIdx)) {
+      userAnswers[qIdx].delete(oIdx);
+      document.getElementById(`opt-${qIdx}-${oIdx}`).classList.remove('selected');
+    } else {
+      userAnswers[qIdx].add(oIdx);
+      document.getElementById(`opt-${qIdx}-${oIdx}`).classList.add('selected');
+    }
+  }
+  updateProgress();
+}
+
+function updateProgress() {
+  const answered = Object.keys(userAnswers).filter(k => userAnswers[k].size > 0).length;
+  const total = shuffled.length;
+  const pct = total ? (answered / total) * 100 : 0;
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-label').textContent = `${answered} / ${total} answered`;
+}
+
+function submitQuiz() {
+  const unanswered = shuffled.filter((_, i) => !userAnswers[i] || userAnswers[i].size === 0);
+  const warnBar = document.getElementById('warn-bar');
+
+  if (unanswered.length > 0) {
+    warnBar.style.display = 'block';
+    warnBar.textContent = `⚠ ${unanswered.length} question${unanswered.length>1?'s are':' is'} unanswered. Please answer all before submitting.`;
+    warnBar.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  warnBar.style.display = 'none';
+  showResults();
+}
+
+function isCorrect(qIdx) {
+  const q = shuffled[qIdx];
+  const chosen = userAnswers[qIdx] ? [...userAnswers[qIdx]].sort((a,b)=>a-b) : [];
+  const correct = [...q.answer].sort((a,b)=>a-b);
+  return JSON.stringify(chosen) === JSON.stringify(correct);
+}
+
+function showResults() {
+  const total = shuffled.length;
+  let correct = 0, wrong = 0, skipped = 0;
+
+  shuffled.forEach((_, i) => {
+    const ans = userAnswers[i];
+    if (!ans || ans.size === 0) skipped++;
+    else if (isCorrect(i)) correct++;
+    else wrong++;
+  });
+
+  const pct = Math.round((correct / total) * 100);
+
+  // Switch screens
+  document.getElementById('quiz-screen').style.display = 'none';
+  document.getElementById('result-screen').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Stats
+  document.getElementById('stat-correct').textContent = correct;
+  document.getElementById('stat-wrong').textContent = wrong;
+  document.getElementById('stat-skip').textContent = skipped;
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('pct-num').textContent = pct;
+
+  // Circle
+  const circumference = 502;
+  const offset = circumference - (pct / 100) * circumference;
+  const fill = document.getElementById('circle-fill');
+  const color = pct >= 75 ? '#3ecf8e' : pct >= 50 ? '#f7c948' : '#f75f5f';
+  fill.style.stroke = color;
+  document.getElementById('pct-num').style.color = color;
+  setTimeout(() => { fill.style.strokeDashoffset = offset; }, 100);
+
+  // Title
+  const titles = [
+    [90, 'Outstanding! 🏆', 'You have an exceptional grasp of IP law.'],
+    [75, 'Great Work! 🎉', 'Strong understanding across most topics.'],
+    [50, 'Good Effort 👍', 'A bit more revision and you\'ll nail it.'],
+    [0,  'Keep Practising 📚', 'Review the lectures and try again!']
+  ];
+  for (const [threshold, title, sub] of titles) {
+    if (pct >= threshold) {
+      document.getElementById('result-title').textContent = title;
+      document.getElementById('result-sub').textContent = `${correct} correct out of ${total} questions — ${sub}`;
+      break;
+    }
+  }
+
+  // Review wrong/skipped
+  const wrongSection = document.getElementById('wrong-section');
+  const reviewContainer = document.getElementById('review-container');
+  reviewContainer.innerHTML = '';
+
+  const wrongOnes = shuffled.map((q, i) => ({q, i})).filter(({i}) => !isCorrect(i));
+
+  if (wrongOnes.length === 0) {
+    wrongSection.style.display = 'none';
+  } else {
+    wrongSection.style.display = 'block';
+    const letters = ['A','B','C','D'];
+
+    wrongOnes.forEach(({q, i}, ri) => {
+      const chosen = userAnswers[i] ? new Set(userAnswers[i]) : new Set();
+      const correct_set = new Set(q.answer);
+
+      const card = document.createElement('div');
+      card.className = 'review-card';
+
+      const optsHtml = q.options.map((opt, oi) => {
+        let cls = '';
+        const isChosen = chosen.has(oi);
+        const isCorrectOpt = correct_set.has(oi);
+
+        if (isCorrectOpt) cls = 'correct';
+        else if (isChosen && !isCorrectOpt) cls = 'wrong';
+
+        return `
+          <div class="option ${cls}" style="cursor:default">
+            <div class="opt-bullet">${letters[oi]}</div>
+            <div class="opt-text">${opt}</div>
+          </div>`;
+      }).join('');
+
+      const skippedLabel = (!userAnswers[i] || userAnswers[i].size === 0)
+        ? '<span style="font-size:12px;color:var(--yellow);margin-left:8px;">SKIPPED</span>' : '';
+
+      card.innerHTML = `
+        <div class="q-meta">
+          <span class="q-num" style="color:var(--red)">Wrong #${ri+1}</span>
+          <span class="q-badge badge-${q.type}">${q.type.toUpperCase()}</span>
+          ${skippedLabel}
+        </div>
+        <div class="review-q">${q.question}</div>
+        <div class="review-opts">${optsHtml}</div>
+      `;
+      reviewContainer.appendChild(card);
+    });
+  }
+}
+
+function retryQuiz() {
+  initQuiz();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Boot
+initQuiz();
+</script>
+</body>
+</html>
