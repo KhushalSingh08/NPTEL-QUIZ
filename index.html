@@ -298,13 +298,32 @@
     .stats-row { gap: 10px; }
     .stat-chip { padding: 12px 16px; min-width: 80px; }
   }
+  /* ── Easter egg toast ── */
+  .nahi-toast {
+    position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text); font-family: 'Syne', sans-serif;
+    font-size: 15px; font-weight: 700; letter-spacing: 1px;
+    padding: 14px 28px; border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s, transform 0.3s;
+    z-index: 9999; white-space: nowrap;
+  }
+  .nahi-toast.show {
+    opacity: 1; transform: translateX(-50%) translateY(0);
+  }
 </style>
 </head>
 <body>
 <div class="top-bar" id="top-bar">
   <span class="top-bar-section" id="top-bar-section">Section 1 · 15 Questions</span>
-  <button class="btn-submit" onclick="submitQuiz()">Submit Test</button>
+  <button class="btn-submit" id="btn-submit-main"
+    onmousedown="startHold()" onmouseup="cancelHold()" onmouseleave="cancelHold()"
+    ontouchstart="startHold()" ontouchend="cancelHold()"
+    onclick="submitQuiz()">Submit Test</button>
 </div>
+<div class="nahi-toast" id="nahi-toast">😭 NAHI HO RHA KYA</div>
 <div class="wrap">
 
   <!-- ── Quiz screen ── -->
@@ -623,7 +642,7 @@ function renderSection() {
     <div class="section-dots">${dotsHtml}</div>
     ${isLast
       ? `<button class="btn-nav btn-nav-next" onclick="submitQuiz()">Submit Test ✓</button>`
-      : `<button class="btn-nav btn-nav-next" onclick="nextSection()"> Next  →</button>`
+      : `<button class="btn-nav btn-nav-next" onclick="nextSection()">Next Week →</button>`
     }
   `;
   container.appendChild(nav);
@@ -821,6 +840,22 @@ function retryQuiz() {
   document.getElementById('top-bar').style.display = 'flex';
   initQuiz();
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ── Easter egg: long-press submit ── */
+let holdTimer = null;
+
+function startHold() {
+  holdTimer = setTimeout(() => {
+    const toast = document.getElementById('nahi-toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
+  }, 5000);
+}
+
+function cancelHold() {
+  clearTimeout(holdTimer);
+  holdTimer = null;
 }
 
 initQuiz();
