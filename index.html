@@ -139,6 +139,65 @@
   .opt-text { font-size: 14.5px; line-height: 1.5; }
   .msq-hint { font-size: 12px; color: var(--muted); margin-top: 8px; font-style: italic; }
 
+  /* ── Section header ── */
+  .section-header {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 24px; padding: 18px 22px;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .section-badge {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px; font-weight: 800; letter-spacing: 2px;
+    text-transform: uppercase; padding: 5px 12px;
+    border-radius: 99px; white-space: nowrap;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff;
+  }
+  .section-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px; font-weight: 700; color: var(--text);
+  }
+  .section-count { font-size: 13px; color: var(--muted); margin-left: auto; white-space: nowrap; }
+
+  /* ── Section nav ── */
+  .section-nav {
+    display: flex; gap: 10px; justify-content: space-between;
+    align-items: center; margin-top: 28px; padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  .btn-nav {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px; font-weight: 700; letter-spacing: 0.5px;
+    background: var(--surface2); border: 1.5px solid var(--border);
+    color: var(--text); border-radius: 8px;
+    padding: 10px 22px; cursor: pointer; transition: all 0.18s;
+  }
+  .btn-nav:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-nav:disabled { opacity: 0.3; cursor: not-allowed; }
+  .btn-nav-next {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-color: transparent; color: #fff;
+    box-shadow: 0 4px 16px rgba(79,142,247,0.28);
+  }
+  .btn-nav-next:hover { transform: translateY(-1px); box-shadow: 0 6px 22px rgba(79,142,247,0.42); border-color: transparent; color: #fff; }
+
+  /* ── Section dots ── */
+  .section-dots { display: flex; gap: 6px; align-items: center; }
+  .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--border); transition: all 0.2s; cursor: pointer;
+  }
+  .dot.active { background: var(--accent); transform: scale(1.3); }
+  .dot.done { background: var(--green); }
+
+  /* ── Top bar section info ── */
+  .top-bar-section {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px; font-weight: 700; color: var(--muted);
+    letter-spacing: 1px; margin-right: auto; padding-left: 4px;
+  }
+
   /* ── Warning bar ── */
   .warn-bar {
     background: rgba(247,201,72,0.12); border: 1px solid rgba(247,201,72,0.3);
@@ -243,6 +302,7 @@
 </head>
 <body>
 <div class="top-bar" id="top-bar">
+  <span class="top-bar-section" id="top-bar-section">Section 1 · 15 Questions</span>
   <button class="btn-submit" onclick="submitQuiz()">Submit Test</button>
 </div>
 <div class="wrap">
@@ -453,9 +513,15 @@ const allQuestions = [
 {question:"In which IP commercialization models does ownership of IPR remain with the original owner?",type:"msq",options:["Licensing of intellectual property","Assignment of intellectual property","Creation of start-up or entrepreneurship based on IP","Sale of intellectual property rights"],answer:[0,2]},
 ];
 
+/* ── Config ── */
+const SECTION_SIZE = 15;
+const NUM_SECTIONS = 8;
+
 /* ── State ── */
-let shuffled = [];
-let userAnswers = {};
+let sections = [];      // array of 8 arrays of 15 questions each
+let currentSection = 0;
+let userAnswers = {};   // keyed by global question index
+let sectionsDone = [];  // booleans
 
 function shuffle(arr) {
   const a = [...arr];
@@ -467,34 +533,60 @@ function shuffle(arr) {
 }
 
 function initQuiz() {
-  shuffled = shuffle(allQuestions);
+  // Shuffle ALL questions, then split into 8 sections of 15
+  const shuffled = shuffle(allQuestions);
+  sections = [];
+  for (let s = 0; s < NUM_SECTIONS; s++) {
+    sections.push(shuffled.slice(s * SECTION_SIZE, (s + 1) * SECTION_SIZE));
+  }
+  currentSection = 0;
   userAnswers = {};
+  sectionsDone = new Array(8).fill(false);
+
   document.getElementById('quiz-screen').style.display = 'block';
   document.getElementById('result-screen').style.display = 'none';
+  document.getElementById('top-bar').style.display = 'flex';
   document.getElementById('warn-bar').style.display = 'none';
-  renderQuestions();
-  updateProgress();
+
+  renderSection();
 }
 
-function renderQuestions() {
+function globalIdx(localIdx) {
+  return currentSection * SECTION_SIZE + localIdx;
+}
+
+function renderSection() {
   const container = document.getElementById('questions-container');
   container.innerHTML = '';
   const letters = ['A','B','C','D','E'];
+  const qs = sections[currentSection];
 
-  shuffled.forEach((q, i) => {
+  // Section header
+  const hdr = document.createElement('div');
+  hdr.className = 'section-header';
+  hdr.innerHTML = `
+    <span class="section-badge">Section ${currentSection + 1}</span>
+    <span class="section-label">${getSectionName(currentSection)}</span>
+    <span class="section-count">${SECTION_SIZE} Questions</span>
+  `;
+  container.appendChild(hdr);
+
+  // Questions
+  qs.forEach((q, li) => {
+    const gi = globalIdx(li);
     const card = document.createElement('div');
     card.className = 'q-card';
-    card.style.animationDelay = `${Math.min(i * 0.025, 0.6)}s`;
+    card.style.animationDelay = `${Math.min(li * 0.025, 0.5)}s`;
 
     card.innerHTML = `
       <div class="q-meta">
-        <span class="q-num">Q${i + 1}</span>
+        <span class="q-num">Q${li + 1}</span>
         <span class="q-badge badge-${q.type}">${q.type.toUpperCase()}</span>
       </div>
       <div class="q-text">${q.question}</div>
-      <div class="options" id="opts-${i}">
+      <div class="options" id="opts-${gi}">
         ${q.options.map((opt, oi) => `
-          <div class="option" id="opt-${i}-${oi}" onclick="toggleOption(${i},${oi})">
+          <div class="option" id="opt-${gi}-${oi}" onclick="toggleOption(${gi},${oi})">
             <div class="opt-bullet">${letters[oi]}</div>
             <div class="opt-text">${opt}</div>
           </div>
@@ -503,70 +595,140 @@ function renderQuestions() {
       ${q.type === 'msq' ? '<p class="msq-hint">Select all correct answers</p>' : ''}
     `;
     container.appendChild(card);
+
+    // Restore previous selections
+    if (userAnswers[gi]) {
+      userAnswers[gi].forEach(oi => {
+        const el = document.getElementById(`opt-${gi}-${oi}`);
+        if (el) el.classList.add('selected');
+      });
+    }
   });
+
+  // Section navigation
+  const nav = document.createElement('div');
+  nav.className = 'section-nav';
+
+  const dotsHtml = sections.map((_, i) => {
+    let cls = 'dot';
+    if (i === currentSection) cls += ' active';
+    else if (sectionsDone[i]) cls += ' done';
+    return `<div class="${cls}" onclick="goToSection(${i})" title="Section ${i+1}"></div>`;
+  }).join('');
+
+  const isLast = currentSection === sections.length - 1;
+
+  nav.innerHTML = `
+    <button class="btn-nav" onclick="prevSection()" ${currentSection === 0 ? 'disabled' : ''}>← Previous</button>
+    <div class="section-dots">${dotsHtml}</div>
+    ${isLast
+      ? `<button class="btn-nav btn-nav-next" onclick="submitQuiz()">Submit Test ✓</button>`
+      : `<button class="btn-nav btn-nav-next" onclick="nextSection()"> Next  →</button>`
+    }
+  `;
+  container.appendChild(nav);
+
+  updateProgress();
+  updateTopBar();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function toggleOption(qIdx, oIdx) {
-  const q = shuffled[qIdx];
-  if (!userAnswers[qIdx]) userAnswers[qIdx] = new Set();
+function getSectionName(idx) {
+  return `Section ${idx + 1} of ${NUM_SECTIONS}`;
+}
+
+function updateTopBar() {
+  document.getElementById('top-bar-section').textContent =
+    `Section ${currentSection + 1} / 8  ·  ${getSectionName(currentSection)}`;
+}
+
+function goToSection(idx) {
+  sectionsDone[currentSection] = true;
+  currentSection = idx;
+  renderSection();
+}
+
+function prevSection() {
+  if (currentSection > 0) {
+    sectionsDone[currentSection] = true;
+    currentSection--;
+    renderSection();
+  }
+}
+
+function nextSection() {
+  if (currentSection < sections.length - 1) {
+    sectionsDone[currentSection] = true;
+    currentSection++;
+    renderSection();
+  }
+}
+
+function toggleOption(gi, oIdx) {
+  const si = Math.floor(gi / SECTION_SIZE);
+  const li = gi % SECTION_SIZE;
+  const q = sections[si][li];
+  if (!userAnswers[gi]) userAnswers[gi] = new Set();
 
   if (q.type === 'mcq') {
-    userAnswers[qIdx].clear();
-    userAnswers[qIdx].add(oIdx);
+    userAnswers[gi].clear();
+    userAnswers[gi].add(oIdx);
     for (let i = 0; i < q.options.length; i++) {
-      document.getElementById(`opt-${qIdx}-${i}`).classList.remove('selected');
+      document.getElementById(`opt-${gi}-${i}`).classList.remove('selected');
     }
-    document.getElementById(`opt-${qIdx}-${oIdx}`).classList.add('selected');
+    document.getElementById(`opt-${gi}-${oIdx}`).classList.add('selected');
   } else {
-    if (userAnswers[qIdx].has(oIdx)) {
-      userAnswers[qIdx].delete(oIdx);
-      document.getElementById(`opt-${qIdx}-${oIdx}`).classList.remove('selected');
+    if (userAnswers[gi].has(oIdx)) {
+      userAnswers[gi].delete(oIdx);
+      document.getElementById(`opt-${gi}-${oIdx}`).classList.remove('selected');
     } else {
-      userAnswers[qIdx].add(oIdx);
-      document.getElementById(`opt-${qIdx}-${oIdx}`).classList.add('selected');
+      userAnswers[gi].add(oIdx);
+      document.getElementById(`opt-${gi}-${oIdx}`).classList.add('selected');
     }
   }
   updateProgress();
 }
 
 function updateProgress() {
-  const answered = Object.keys(userAnswers).filter(k => userAnswers[k].size > 0).length;
-  const total = shuffled.length;
+  const total = sections.length * SECTION_SIZE;
+  const answered = Object.values(userAnswers).filter(s => s.size > 0).length;
   const pct = total ? (answered / total) * 100 : 0;
   document.getElementById('prog-fill').style.width = pct + '%';
   document.getElementById('prog-label').textContent = `${answered} / ${total} answered`;
 }
 
 function submitQuiz() {
-  const unanswered = shuffled.filter((_, i) => !userAnswers[i] || userAnswers[i].size === 0);
+  const total = sections.length * SECTION_SIZE;
+  const unanswered = total - Object.values(userAnswers).filter(s => s.size > 0).length;
   const warnBar = document.getElementById('warn-bar');
 
-  if (unanswered.length > 0) {
+  if (unanswered > 0) {
     warnBar.style.display = 'block';
-    warnBar.textContent = `⚠ ${unanswered.length} question${unanswered.length > 1 ? 's are' : ' is'} unanswered. You may submit anyway or answer them first.`;
-    warnBar.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    warnBar.textContent = `⚠ ${unanswered} question${unanswered > 1 ? 's are' : ' is'} unanswered. You may submit anyway or go back to answer them.`;
   }
 
   showResults();
 }
 
-function isCorrect(qIdx) {
-  const q = shuffled[qIdx];
-  const chosen = userAnswers[qIdx] ? [...userAnswers[qIdx]].sort((a, b) => a - b) : [];
+function isCorrect(gi) {
+  const si = Math.floor(gi / SECTION_SIZE);
+  const li = gi % SECTION_SIZE;
+  const q = sections[si][li];
+  const chosen = userAnswers[gi] ? [...userAnswers[gi]].sort((a, b) => a - b) : [];
   const correct = [...q.answer].sort((a, b) => a - b);
   return JSON.stringify(chosen) === JSON.stringify(correct);
 }
 
 function showResults() {
-  const total = shuffled.length;
+  const total = sections.length * SECTION_SIZE;
   let correct = 0, wrong = 0, skipped = 0;
 
-  shuffled.forEach((_, i) => {
-    const ans = userAnswers[i];
+  for (let gi = 0; gi < total; gi++) {
+    const ans = userAnswers[gi];
     if (!ans || ans.size === 0) skipped++;
-    else if (isCorrect(i)) correct++;
+    else if (isCorrect(gi)) correct++;
     else wrong++;
-  });
+  }
 
   const pct = Math.round((correct / total) * 100);
 
@@ -607,35 +769,38 @@ function showResults() {
   const reviewContainer = document.getElementById('review-container');
   reviewContainer.innerHTML = '';
 
-  const wrongOnes = shuffled.map((q, i) => ({ q, i })).filter(({ i }) => !isCorrect(i));
+  const letters = ['A','B','C','D','E'];
+  const wrongOnes = [];
+  for (let gi = 0; gi < total; gi++) {
+    if (!isCorrect(gi)) {
+      const si = Math.floor(gi / SECTION_SIZE);
+      const li = gi % SECTION_SIZE;
+      wrongOnes.push({ q: sections[si][li], gi });
+    }
+  }
 
   if (wrongOnes.length === 0) {
     wrongSection.style.display = 'none';
   } else {
     wrongSection.style.display = 'block';
-    const letters = ['A','B','C','D','E'];
-
-    wrongOnes.forEach(({ q, i }, ri) => {
-      const chosen = userAnswers[i] ? new Set(userAnswers[i]) : new Set();
+    wrongOnes.forEach(({ q, gi }, ri) => {
+      const chosen = userAnswers[gi] ? new Set(userAnswers[gi]) : new Set();
       const correct_set = new Set(q.answer);
-
       const card = document.createElement('div');
       card.className = 'review-card';
 
       const optsHtml = q.options.map((opt, oi) => {
         let cls = '';
-        const isChosen = chosen.has(oi);
-        const isCorrectOpt = correct_set.has(oi);
-        if (isCorrectOpt) cls = 'correct';
-        else if (isChosen && !isCorrectOpt) cls = 'wrong';
-        return `
-          <div class="option ${cls}" style="cursor:default">
-            <div class="opt-bullet">${letters[oi]}</div>
-            <div class="opt-text">${opt}</div>
-          </div>`;
+        if (correct_set.has(oi)) cls = 'correct';
+        else if (chosen.has(oi)) cls = 'wrong';
+        return `<div class="option ${cls}" style="cursor:default">
+          <div class="opt-bullet">${letters[oi]}</div>
+          <div class="opt-text">${opt}</div>
+        </div>`;
       }).join('');
 
-      const skippedLabel = (!userAnswers[i] || userAnswers[i].size === 0)
+      const wk = Math.floor(gi / SECTION_SIZE) + 1;
+      const skippedLabel = (!userAnswers[gi] || userAnswers[gi].size === 0)
         ? '<span style="font-size:12px;color:var(--yellow);margin-left:8px;">SKIPPED</span>' : '';
 
       card.innerHTML = `
